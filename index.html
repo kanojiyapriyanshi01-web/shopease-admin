@@ -5,679 +5,302 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ShopEase Admin</title>
 <style>
-  :root {
-    --primary: #C65D07;
-    --primary-dark: #A34D06;
-    --primary-light: #F4E4D8;
-    --bg: #F7F8FA;
-    --sidebar: #1A1A2E;
-    --sidebar-hover: #16213E;
-    --card: #FFFFFF;
-    --border: #E8ECF0;
-    --text: #1A1A2E;
-    --text-secondary: #6B7280;
-    --success: #10B981;
-    --warning: #F59E0B;
-    --danger: #EF4444;
-    --info: #3B82F6;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
-  #sidebar { width:240px; min-height:100vh; background:var(--sidebar); display:flex; flex-direction:column; position:fixed; left:0; top:0; z-index:100; }
-  .sidebar-logo { padding:20px 20px 16px; border-bottom:1px solid rgba(255,255,255,0.08); }
-  .sidebar-logo h1 { color:#fff; font-size:20px; font-weight:700; }
-  .sidebar-logo span { color:var(--primary); }
-  .sidebar-sub { color:rgba(255,255,255,0.4); font-size:11px; margin-top:2px; }
-  .sidebar-nav { flex:1; padding:12px 0; overflow-y:auto; }
-  .nav-section { padding:8px 16px 4px; color:rgba(255,255,255,0.3); font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; }
-  .nav-item { display:flex; align-items:center; gap:10px; padding:10px 20px; color:rgba(255,255,255,0.65); cursor:pointer; font-size:13.5px; transition:all 0.15s; border-left:3px solid transparent; }
-  .nav-item:hover { background:var(--sidebar-hover); color:#fff; }
-  .nav-item.active { background:rgba(198,93,7,0.15); color:var(--primary); border-left-color:var(--primary); }
-  .nav-item .icon { font-size:18px; width:22px; text-align:center; }
-  .nav-badge { margin-left:auto; background:var(--primary); color:#fff; font-size:10px; padding:2px 6px; border-radius:10px; }
-  .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); }
-  .sidebar-user { display:flex; align-items:center; gap:10px; }
-  .user-avatar { width:34px; height:34px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:14px; }
-  .user-name { color:#fff; font-size:13px; font-weight:600; }
-  .user-role { color:rgba(255,255,255,0.4); font-size:11px; }
-  #main { margin-left:240px; flex:1; display:flex; flex-direction:column; }
-  #topbar { background:var(--card); border-bottom:1px solid var(--border); padding:0 28px; height:60px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:50; }
-  .topbar-title { font-size:17px; font-weight:700; flex:1; }
-  .topbar-actions { display:flex; align-items:center; gap:10px; }
-  .btn { padding:8px 16px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:600; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s; }
-  .btn-primary { background:var(--primary); color:#fff; }
-  .btn-primary:hover { background:var(--primary-dark); }
-  .btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); }
-  .btn-ghost:hover { background:var(--bg); }
-  .btn-sm { padding:6px 12px; font-size:12px; }
-  .btn-danger { background:var(--danger); color:#fff; }
-  .btn-success { background:var(--success); color:#fff; }
-  .search-bar { display:flex; align-items:center; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0 12px; gap:8px; height:36px; }
-  .search-bar input { border:none; background:transparent; outline:none; font-size:13px; width:180px; }
-  #content { padding:24px 28px; flex:1; }
-  .card { background:var(--card); border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow); }
-  .card-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-  .card-title { font-size:14px; font-weight:700; }
-  .card-body { padding:20px; }
-  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
-  .stat-card { background:var(--card); border-radius:12px; border:1px solid var(--border); padding:20px; box-shadow:var(--shadow); }
-  .stat-label { font-size:11px; color:var(--text-secondary); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
-  .stat-value { font-size:26px; font-weight:800; margin:6px 0 4px; }
-  .stat-icon { float:right; font-size:30px; opacity:0.12; margin-top:-8px; }
-  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
-  .table-wrap { overflow-x:auto; }
-  table { width:100%; border-collapse:collapse; font-size:13px; }
-  thead th { background:var(--bg); padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
-  tbody td { padding:12px 16px; border-bottom:1px solid var(--border); }
-  tbody tr:last-child td { border-bottom:none; }
-  tbody tr:hover { background:#FAFBFC; }
-  .badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; }
-  .badge-success { background:#D1FAE5; color:#065F46; }
-  .badge-warning { background:#FEF3C7; color:#92400E; }
-  .badge-danger { background:#FEE2E2; color:#991B1B; }
-  .badge-info { background:#DBEAFE; color:#1E40AF; }
-  .badge-gray { background:#F3F4F6; color:#374151; }
-  .badge-purple { background:#EDE9FE; color:#5B21B6; }
-  .form-group { margin-bottom:16px; }
-  .form-label { display:block; font-size:11px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em; }
-  .form-control { width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:13px; outline:none; transition:border 0.15s; background:#fff; font-family:inherit; }
-  .form-control:focus { border-color:var(--primary); }
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; }
-  .modal-overlay.open { display:flex; }
-  .modal { background:#fff; border-radius:16px; width:520px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
-  .modal-header { padding:20px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-  .modal-title { font-size:16px; font-weight:700; }
-  .modal-close { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-secondary); }
-  .modal-body { padding:20px 24px; }
-  .modal-footer { padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px; }
-  #toast { position:fixed; bottom:24px; right:24px; z-index:999; display:flex; flex-direction:column; gap:8px; }
-  .toast-item { background:#1A1A2E; color:#fff; padding:12px 18px; border-radius:10px; font-size:13px; font-weight:500; box-shadow:var(--shadow-md); display:flex; align-items:center; gap:10px; min-width:260px; animation:slideIn 0.3s ease; }
-  .toast-item.success { border-left:4px solid var(--success); }
-  .toast-item.error { border-left:4px solid var(--danger); }
-  .toast-item.info { border-left:4px solid var(--info); }
-  @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
-  .loading { display:flex; align-items:center; justify-content:center; padding:40px; flex-direction:column; gap:12px; color:var(--text-secondary); }
-  .spinner { width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .empty-state { text-align:center; padding:48px 20px; color:var(--text-secondary); }
-  .empty-icon { font-size:44px; margin-bottom:10px; opacity:0.35; }
-  .empty-state h3 { font-size:14px; font-weight:600; margin-bottom:4px; color:var(--text); }
-  .empty-state p { font-size:12px; }
-  .action-btn { background:none; border:1px solid var(--border); border-radius:6px; padding:4px 10px; cursor:pointer; font-size:12px; font-weight:500; transition:all 0.15s; margin-right:4px; }
-  .action-btn.edit { color:var(--info); border-color:#BFDBFE; }
-  .action-btn.delete { color:var(--danger); border-color:#FECACA; }
-  .page { display:none; }
-  .page.active { display:block; }
-  .tab-bar { display:flex; border-bottom:2px solid var(--border); margin-bottom:24px; }
-  .tab-item { padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer; color:var(--text-secondary); border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.15s; }
-  .tab-item.active { color:var(--primary); border-bottom-color:var(--primary); }
-  .metric-row { display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
-  .metric-item { flex:1; min-width:120px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; }
-  .metric-value { font-size:22px; font-weight:800; color:var(--primary); }
-  .metric-label { font-size:11px; color:var(--text-secondary); margin-top:4px; text-transform:uppercase; letter-spacing:0.05em; }
-  #login-page { display:none; position:fixed; inset:0; background:linear-gradient(135deg,#1A1A2E,#16213E); z-index:1000; align-items:center; justify-content:center; }
-  #login-page.show { display:flex; }
-  .login-card { background:#fff; border-radius:20px; padding:40px; width:380px; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
-  .login-logo { text-align:center; margin-bottom:28px; }
-  .login-logo h1 { font-size:32px; font-weight:800; }
-  .login-logo span { color:var(--primary); }
-  .login-subtitle { color:var(--text-secondary); font-size:13px; margin-top:4px; }
-  .status-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
-  .dot-green { background:var(--success); }
-  .dot-red { background:var(--danger); }
-  .dot-gray { background:#9CA3AF; }
-  .progress-bar { height:8px; background:var(--bg); border-radius:4px; overflow:hidden; flex:1; }
-  .progress-fill { height:100%; border-radius:4px; background:var(--primary); }
+:root{--primary:#C65D07;--primary-dark:#A34D06;--bg:#F7F8FA;--sidebar:#1A1A2E;--sidebar-hover:#16213E;--card:#fff;--border:#E8ECF0;--text:#1A1A2E;--text-secondary:#6B7280;--success:#10B981;--warning:#F59E0B;--danger:#EF4444;--info:#3B82F6;--shadow:0 1px 3px rgba(0,0,0,0.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
+#sidebar{width:240px;min-height:100vh;background:var(--sidebar);display:flex;flex-direction:column;position:fixed;left:0;top:0;z-index:100;}
+.sidebar-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo h1{color:#fff;font-size:20px;font-weight:700;}
+.sidebar-logo span{color:var(--primary);}
+.sidebar-sub{color:rgba(255,255,255,0.4);font-size:11px;margin-top:2px;}
+.sidebar-nav{flex:1;padding:12px 0;overflow-y:auto;}
+.nav-section{padding:8px 16px 4px;color:rgba(255,255,255,0.3);font-size:10px;font-weight:600;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,0.65);cursor:pointer;font-size:13px;border-left:3px solid transparent;}
+.nav-item:hover{background:var(--sidebar-hover);color:#fff;}
+.nav-item.active{background:rgba(198,93,7,0.15);color:var(--primary);border-left-color:var(--primary);}
+.nav-badge{margin-left:auto;background:var(--primary);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.sidebar-user{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;}
+.user-name{color:#fff;font-size:13px;font-weight:600;}
+.user-role{color:rgba(255,255,255,0.4);font-size:11px;}
+#main{margin-left:240px;flex:1;display:flex;flex-direction:column;}
+#topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+.topbar-title{font-size:17px;font-weight:700;flex:1;}
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-success{background:var(--success);color:#fff;}
+.btn-danger{background:var(--danger);color:#fff;}
+#content{padding:24px 28px;flex:1;}
+.card{background:var(--card);border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:14px;font-weight:700;}
+.card-body{padding:20px;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:20px;}
+.stat-label{font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;}
+.stat-value{font-size:26px;font-weight:800;margin:6px 0 4px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{background:var(--bg);padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;border-bottom:1px solid var(--border);}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--border);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#FAFBFC;}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-success{background:#D1FAE5;color:#065F46;}
+.badge-warning{background:#FEF3C7;color:#92400E;}
+.badge-danger{background:#FEE2E2;color:#991B1B;}
+.badge-info{background:#DBEAFE;color:#1E40AF;}
+.badge-gray{background:#F3F4F6;color:#374151;}
+.badge-purple{background:#EDE9FE;color:#5B21B6;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;}
+.form-control{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;background:#fff;font-family:inherit;}
+.form-control:focus{border-color:var(--primary);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:16px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:16px;font-weight:700;}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-secondary);}
+.modal-body{padding:20px 24px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+.toast-item{background:#1A1A2E;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;min-width:260px;animation:slideIn 0.3s ease;}
+.toast-item.success{border-left:4px solid var(--success);}
+.toast-item.error{border-left:4px solid var(--danger);}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;flex-direction:column;gap:12px;color:var(--text-secondary);}
+.spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-secondary);}
+.empty-state h3{font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);}
+.page{display:none;}
+.page.active{display:block;}
+.progress-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;flex:1;}
+.progress-fill{height:100%;border-radius:4px;background:var(--primary);}
+#login-page{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#1A1A2E,#16213E);z-index:1000;align-items:center;justify-content:center;}
+#login-page.show{display:flex;}
+.login-card{background:#fff;border-radius:20px;padding:40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.approval-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+.dot-green{background:var(--success);}
 </style>
 </head>
 <body>
-
 <div id="login-page" class="show">
   <div class="login-card">
-    <div class="login-logo">
-      <h1>Shop<span>Ease</span></h1>
-      <div class="login-subtitle">Admin Dashboard</div>
+    <div style="text-align:center;margin-bottom:28px;">
+      <h1 style="font-size:32px;font-weight:800;">Shop<span style="color:var(--primary);">Ease</span></h1>
+      <div style="color:#6b7280;font-size:13px;margin-top:4px;">Admin Dashboard</div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Phone Number</label>
-      <input class="form-control" id="login-phone" type="text" placeholder="Admin phone number" value="9999999999"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password</label>
-      <input class="form-control" id="login-pass" type="password" placeholder="Password" value="admin123"/>
-    </div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-control" id="login-email" type="email" placeholder="admin@shopease.com"/></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-control" id="login-pass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
     <div id="login-error" style="color:var(--danger);font-size:12px;margin-bottom:12px;display:none;padding:10px;background:#FEF2F2;border-radius:8px;"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doLogin()">Sign In â†’</button>
-    <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text-secondary);">ShopEase Admin Panel v2.0</div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doLogin()">Sign In</button>
   </div>
 </div>
-
 <div id="sidebar">
-  <div class="sidebar-logo">
-    <h1>Shop<span>Ease</span></h1>
-    <div class="sidebar-sub">Admin Panel</div>
-  </div>
+  <div class="sidebar-logo"><h1>Shop<span>Ease</span></h1><div class="sidebar-sub">Admin Panel</div></div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
-    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard',this)"><span class="icon">ðŸ“Š</span>Dashboard</div>
-    <div class="nav-item" data-page="orders" onclick="navigate('orders',this)"><span class="icon">ðŸ“¦</span>Orders<span class="nav-badge" id="pending-badge">0</span></div>
+    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard',this)">Dashboard</div>
+    <div class="nav-item" data-page="orders" onclick="navigate('orders',this)">Orders <span class="nav-badge" id="pending-badge">0</span></div>
     <div class="nav-section">Catalog</div>
-    <div class="nav-item" data-page="products" onclick="navigate('products',this)"><span class="icon">ðŸ›ï¸</span>Products</div>
+    <div class="nav-item" data-page="products" onclick="navigate('products',this)">Products</div>
+    <div class="nav-section">Sellers</div>
+    <div class="nav-item" data-page="sellers" onclick="navigate('sellers',this)">Sellers</div>
+    <div class="nav-item" data-page="seller-products" onclick="navigate('seller-products',this)">Product Approvals <span class="nav-badge" id="approval-badge">0</span></div>
     <div class="nav-section">Customers</div>
-    <div class="nav-item" data-page="users" onclick="navigate('users',this)"><span class="icon">ðŸ‘¥</span>Users</div>
-    <div class="nav-section">Finance</div>
-    <div class="nav-item" data-page="payments" onclick="navigate('payments',this)"><span class="icon">ðŸ’³</span>Payments</div>
-    <div class="nav-item" data-page="returns" onclick="navigate('returns',this)"><span class="icon">â†©ï¸</span>Returns</div>
-    <div class="nav-section">Reports</div>
-    <div class="nav-item" data-page="analytics" onclick="navigate('analytics',this)"><span class="icon">ðŸ“ˆ</span>Analytics</div>
+    <div class="nav-item" data-page="users" onclick="navigate('users',this)">Users</div>
     <div class="nav-section">System</div>
-    <div class="nav-item" data-page="settings" onclick="navigate('settings',this)"><span class="icon">âš™ï¸</span>Settings</div>
+    <div class="nav-item" data-page="settings" onclick="navigate('settings',this)">Settings</div>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-user">
       <div class="user-avatar">A</div>
       <div style="flex:1;"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div>
-      <button style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:18px;" onclick="logout()" title="Logout">â</button>
+      <button style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:13px;font-weight:600;" onclick="logout()">Logout</button>
     </div>
   </div>
 </div>
-
 <div id="main">
   <div id="topbar">
     <div class="topbar-title" id="page-title">Dashboard</div>
-    <div class="topbar-actions">
-      <div class="search-bar">
-        <span>ðŸ”</span>
-        <input type="text" placeholder="Search..." id="global-search"/>
-      </div>
-      <button class="btn btn-ghost btn-sm" onclick="refreshData()">ðŸ”„ Refresh</button>
-      <div id="api-status" style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;">
-        <span class="status-dot dot-gray"></span>Connecting...
-      </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn btn-ghost btn-sm" onclick="refreshData()">Refresh</button>
+      <div id="api-status" style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;"><span class="status-dot dot-green"></span>Connected</div>
     </div>
   </div>
-
   <div id="content">
-    <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-icon">ðŸ“¦</div><div class="stat-label">Total Orders</div><div class="stat-value" id="s-orders">â€”</div></div>
-        <div class="stat-card"><div class="stat-icon">ðŸ’°</div><div class="stat-label">Revenue</div><div class="stat-value" id="s-revenue">â€”</div></div>
-        <div class="stat-card"><div class="stat-icon">ðŸ‘¥</div><div class="stat-label">Users</div><div class="stat-value" id="s-users">â€”</div></div>
-        <div class="stat-card"><div class="stat-icon">ðŸ›ï¸</div><div class="stat-label">Products</div><div class="stat-value" id="s-products">â€”</div></div>
+        <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="s-orders">-</div></div>
+        <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="s-revenue">-</div></div>
+        <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value" id="s-users">-</div></div>
+        <div class="stat-card"><div class="stat-label">Products</div><div class="stat-value" id="s-products">-</div></div>
       </div>
       <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><div class="card-title">Recent Orders</div><button class="btn btn-ghost btn-sm" onclick="navigate('orders',null)">View All</button></div>
-          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="dash-orders"><tr><td colspan="4"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-        </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Orders by Status</div></div>
-          <div class="card-body" id="dash-breakdown"><div class="loading"><div class="spinner"></div></div></div>
-        </div>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><div class="card-title">Products</div></div>
-          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Price</th><th>Category</th></tr></thead><tbody id="dash-products"><tr><td colspan="3"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-        </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Recent Users</div></div>
-          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Joined</th></tr></thead><tbody id="dash-users"><tr><td colspan="3"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-        </div>
+        <div class="card"><div class="card-header"><div class="card-title">Recent Orders</div><button class="btn btn-ghost btn-sm" onclick="navigate('orders',null)">View All</button></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="dash-orders"></tbody></table></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">Recent Users</div></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Joined</th></tr></thead><tbody id="dash-users"></tbody></table></div></div>
       </div>
     </div>
-
-    <!-- ORDERS -->
     <div class="page" id="page-orders">
       <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
-        <select class="form-control" id="order-status-filter" style="width:160px;" onchange="filterOrders()">
-          <option value="">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="processing">Processing</option>
-          <option value="shipped">Shipped</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+        <select class="form-control" id="order-status-filter" style="width:160px;" onchange="filterOrders()"><option value="">All Status</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select>
         <input class="form-control" id="order-search" placeholder="Search by order ID..." style="width:220px;" oninput="filterOrders()"/>
       </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">All Orders</div><span id="orders-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div>
-        <div class="table-wrap"><table><thead><tr><th>Order ID</th><th>User</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="orders-table"><tr><td colspan="6"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-      </div>
+      <div class="card"><div class="card-header"><div class="card-title">All Orders</div><span id="orders-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div><div class="table-wrap"><table><thead><tr><th>Order ID</th><th>User</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="orders-table"></tbody></table></div></div>
     </div>
-
-    <!-- PRODUCTS -->
     <div class="page" id="page-products">
-      <div style="display:flex;gap:12px;margin-bottom:20px;align-items:center;">
-        <input class="form-control" id="product-search" placeholder="Search products..." style="width:240px;" oninput="filterProducts()"/>
-        <select class="form-control" id="cat-filter" style="width:160px;" onchange="filterProducts()"><option value="">All Categories</option></select>
-        <button class="btn btn-primary" style="margin-left:auto;" onclick="openProductModal(null)">+ Add Product</button>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Products</div><span id="products-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div>
-        <div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Original</th><th>Discount</th><th>Actions</th></tr></thead><tbody id="products-table"><tr><td colspan="6"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-      </div>
+      <div class="card"><div class="card-header"><div class="card-title">All Products</div><span id="products-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Price</th><th>Category</th></tr></thead><tbody id="products-table"></tbody></table></div></div>
     </div>
-
-    <!-- USERS -->
+    <div class="page" id="page-sellers">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h2 style="font-size:18px;font-weight:700;">All Sellers</h2><button class="btn btn-ghost btn-sm" onclick="loadSellers()">Refresh</button></div>
+      <div id="sellers-list"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+    <div class="page" id="page-seller-products">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h2 style="font-size:18px;font-weight:700;">Pending Product Approvals</h2><button class="btn btn-ghost btn-sm" onclick="loadSellerProducts()">Refresh</button></div>
+      <div id="seller-products-list"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
     <div class="page" id="page-users">
-      <div class="card">
-        <div class="card-header"><div class="card-title">All Users</div><span id="users-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div>
-        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Joined</th></tr></thead><tbody id="users-table"><tr><td colspan="4"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-      </div>
+      <div class="card"><div class="card-header"><div class="card-title">All Users</div><span id="users-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Joined</th></tr></thead><tbody id="users-table"></tbody></table></div></div>
     </div>
-
-    <!-- PAYMENTS -->
-    <div class="page" id="page-payments">
-      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="pay-total" style="color:var(--success);">â€”</div></div>
-        <div class="stat-card"><div class="stat-label">COD Orders</div><div class="stat-value" id="pay-cod">â€”</div></div>
-        <div class="stat-card"><div class="stat-label">Online Orders</div><div class="stat-value" id="pay-online">â€”</div></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Transactions</div></div>
-        <div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody id="payments-table"><tr><td colspan="5"><div class="loading"><div class="spinner"></div></div></td></tr></tbody></table></div>
-      </div>
-    </div>
-
-    <!-- RETURNS -->
-    <div class="page" id="page-returns">
-      <div class="card">
-        <div class="card-header"><div class="card-title">Returns & Exchanges</div></div>
-        <div class="empty-state"><div class="empty-icon">â†©ï¸</div><h3>No Returns Yet</h3><p>Return requests will appear here</p></div>
-      </div>
-    </div>
-
-    <!-- ANALYTICS -->
-    <div class="page" id="page-analytics">
-      <div class="metric-row">
-        <div class="metric-item"><div class="metric-value" id="a-orders">â€”</div><div class="metric-label">Orders</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-revenue">â€”</div><div class="metric-label">Revenue</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-users">â€”</div><div class="metric-label">Users</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-avg">â€”</div><div class="metric-label">Avg Order</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-products">â€”</div><div class="metric-label">Products</div></div>
-      </div>
-      <div class="grid-2">
-        <div class="card"><div class="card-header"><div class="card-title">Orders by Status</div></div><div class="card-body" id="a-status"></div></div>
-        <div class="card"><div class="card-header"><div class="card-title">Products by Category</div></div><div class="card-body" id="a-category"></div></div>
-      </div>
-    </div>
-
-    <!-- SETTINGS -->
     <div class="page" id="page-settings">
-      <div class="tab-bar">
-        <div class="tab-item active" onclick="switchTab('general',this)">General</div>
-        <div class="tab-item" onclick="switchTab('api',this)">API Config</div>
-        <div class="tab-item" onclick="switchTab('notif',this)">Notifications</div>
-      </div>
-      <div id="stab-general">
-        <div class="grid-2">
-          <div class="card"><div class="card-header"><div class="card-title">Store Settings</div></div><div class="card-body">
-            <div class="form-group"><label class="form-label">Store Name</label><input class="form-control" value="ShopEase"/></div>
-            <div class="form-group"><label class="form-label">Support Email</label><input class="form-control" value="support@shopease.com"/></div>
-            <div class="form-group"><label class="form-label">Currency</label><select class="form-control"><option>INR (â‚¹)</option><option>USD ($)</option></select></div>
-            <button class="btn btn-primary" onclick="toast('Settings saved!','success')">Save Changes</button>
-          </div></div>
-          <div class="card"><div class="card-header"><div class="card-title">Admin Account</div></div><div class="card-body">
-            <div class="form-group"><label class="form-label">Admin Phone</label><input class="form-control" value="9999999999"/></div>
-            <div class="form-group"><label class="form-label">New Password</label><input class="form-control" type="password" placeholder="Leave blank to keep"/></div>
-            <button class="btn btn-primary" onclick="toast('Account updated!','success')">Update</button>
-          </div></div>
-        </div>
-      </div>
-      <div id="stab-api" style="display:none;">
-        <div class="card"><div class="card-header"><div class="card-title">API Configuration</div></div><div class="card-body">
-          <div class="form-group">
-            <label class="form-label">Backend API URL</label>
-            <input class="form-control" id="api-url-input" placeholder="https://your-app.onrender.com"/>
-            <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Current: <span id="cur-api"></span></div>
-          </div>
-          <div style="display:flex;gap:10px;">
-            <button class="btn btn-primary" onclick="saveApiUrl()">Save & Reconnect</button>
-            <button class="btn btn-ghost" onclick="testConn()">Test Connection</button>
-          </div>
-        </div></div>
-      </div>
-      <div id="stab-notif" style="display:none;">
-        <div class="card"><div class="card-header"><div class="card-title">Notifications</div></div><div class="card-body">
-          <div style="display:flex;flex-direction:column;gap:14px;">
-            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;"><input type="checkbox" checked/> New order alerts</label>
-            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;"><input type="checkbox" checked/> Low stock alerts</label>
-            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;"><input type="checkbox"/> Daily revenue report</label>
-          </div>
-          <button class="btn btn-primary" style="margin-top:20px;" onclick="toast('Saved!','success')">Save</button>
-        </div></div>
-      </div>
+      <div class="card"><div class="card-header"><div class="card-title">Settings</div></div><div class="card-body"><p style="color:var(--text-secondary);font-size:13px;">Backend: https://shopease-backend-be8v.onrender.com</p></div></div>
     </div>
   </div>
 </div>
-
-<div id="toast"></div>
-
-<!-- Order Modal -->
 <div class="modal-overlay" id="order-modal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Update Order Status</div><button class="modal-close" onclick="closeModal('order-modal')">âœ•</button></div>
+    <div class="modal-header"><div class="modal-title">Update Order Status</div><button class="modal-close" onclick="closeModal('order-modal')">X</button></div>
     <div class="modal-body">
       <div class="form-group"><label class="form-label">Order ID</label><input class="form-control" id="m-order-id" readonly/></div>
-      <div class="form-group"><label class="form-label">Current Status</label><input class="form-control" id="m-order-cur" readonly/></div>
-      <div class="form-group"><label class="form-label">New Status</label>
-        <select class="form-control" id="m-order-status">
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="processing">Processing</option>
-          <option value="shipped">Shipped</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-      </div>
+      <div class="form-group"><label class="form-label">New Status</label><select class="form-control" id="m-order-status"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('order-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="updateOrder()">Update</button>
-    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('order-modal')">Cancel</button><button class="btn btn-primary" onclick="updateOrder()">Update</button></div>
   </div>
 </div>
-
-<!-- Product Modal -->
-<div class="modal-overlay" id="product-modal">
-  <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="pm-title">Add Product</div><button class="modal-close" onclick="closeModal('product-modal')">âœ•</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Name *</label><input class="form-control" id="pm-name" placeholder="Product name"/></div>
-      <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="pm-desc" rows="2" placeholder="Description"></textarea></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-group"><label class="form-label">Price (â‚¹) *</label><input class="form-control" id="pm-price" type="number" placeholder="999"/></div>
-        <div class="form-group"><label class="form-label">Original Price (â‚¹)</label><input class="form-control" id="pm-original" type="number" placeholder="1999"/></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-group"><label class="form-label">Category *</label><input class="form-control" id="pm-cat" placeholder="Sarees, Kurtis..."/></div>
-        <div class="form-group"><label class="form-label">Image URL</label><input class="form-control" id="pm-img" placeholder="https://..."/></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('product-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
-    </div>
-  </div>
-</div>
-
+<div id="toast"></div>
 <script>
-let API_URL = localStorage.getItem('se_api') || 'https://shopease-backend-be8v.onrender.com';
-let TOKEN = localStorage.getItem('se_token') || '';
-let allOrders=[], allProducts=[], allUsers=[];
-let editProdId=null;
-
-window.onload = () => {
-  document.getElementById('cur-api').textContent = API_URL;
-  document.getElementById('api-url-input').value = API_URL;
-  if (TOKEN) { showApp(); loadAll(); }
-};
-
-function showApp() {
-  document.getElementById('login-page').classList.remove('show');
-  checkStatus();
-}
-
-async function doLogin() {
-  const phone = document.getElementById('login-phone').value.trim();
-  const pass = document.getElementById('login-pass').value.trim();
-  const err = document.getElementById('login-error');
+const API_URL='https://shopease-backend-be8v.onrender.com';
+let TOKEN='',allOrders=[],allProducts=[],allUsers=[];
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value.trim();
+  const err=document.getElementById('login-error');
   err.style.display='none';
-  try {
-    const r = await fetch(`${API_URL}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,password:pass})});
-    if(r.ok){ const d=await r.json(); TOKEN=d.token||d.access_token||'ok'; localStorage.setItem('se_token',TOKEN); showApp(); loadAll(); return; }
-  } catch(e){}
-  if(phone==='9999999999'&&pass==='admin123'){ TOKEN='local'; localStorage.setItem('se_token',TOKEN); showApp(); loadAll(); return; }
-  err.textContent='Invalid credentials. Try 9999999999 / admin123'; err.style.display='block';
+  try{
+    const r=await fetch(API_URL+'/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+    if(r.ok){const d=await r.json();TOKEN=d.token;document.getElementById('login-page').classList.remove('show');loadAll();return;}
+  }catch(e){}
+  err.textContent='Invalid credentials';err.style.display='block';
 }
-
-function logout(){ TOKEN=''; localStorage.removeItem('se_token'); location.reload(); }
-
-async function apiFetch(path,opts={}){
-  const r=await fetch(`${API_URL}${path}`,{...opts,headers:{'Content-Type':'application/json','Authorization':`Bearer ${TOKEN}`,...(opts.headers||{})}});
-  if(!r.ok) throw new Error(r.status);
+function logout(){TOKEN='';location.reload();}
+async function apiFetch(path,opts){
+  opts=opts||{};
+  const r=await fetch(API_URL+path,Object.assign({},opts,{headers:Object.assign({'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},opts.headers||{})}));
+  if(!r.ok)throw new Error(r.status);
   return r.json();
 }
-
-async function checkStatus(){
-  const el=document.getElementById('api-status');
-  try{ await fetch(`${API_URL}/products`); el.innerHTML='<span class="status-dot dot-green"></span>Connected'; }
-  catch{ el.innerHTML='<span class="status-dot dot-red"></span>Offline'; }
+function navigate(page,el){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  if(el)el.classList.add('active');
+  else{var n=document.querySelector('[data-page="'+page+'"]');if(n)n.classList.add('active');}
+  var titles={dashboard:'Dashboard',orders:'Orders',products:'Products',sellers:'Sellers','seller-products':'Product Approvals',users:'Users',settings:'Settings'};
+  document.getElementById('page-title').textContent=titles[page]||page;
+  var map={orders:loadOrders,products:loadProducts,users:loadUsers,sellers:loadSellers,'seller-products':loadSellerProducts};
+  if(map[page])map[page]();
 }
-
-function navigate(page, el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById(`page-${page}`).classList.add('active');
-  if(el) el.classList.add('active');
-  else document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
-  document.getElementById('page-title').textContent = {dashboard:'Dashboard',orders:'Orders',products:'Products',users:'Users',payments:'Payments',returns:'Returns & Exchanges',analytics:'Analytics',settings:'Settings'}[page]||page;
-  const map={orders:loadOrders,products:loadProducts,users:loadUsers,payments:loadPayments,analytics:loadAnalytics};
-  if(map[page]) map[page]();
-}
-
+function refreshData(){var active=document.querySelector('.page.active');if(active)navigate(active.id.replace('page-',''),null);}
 async function loadAll(){
   try{
-    const [od,pd,ud]=await Promise.allSettled([apiFetch('/admin/orders'),apiFetch('/products'),apiFetch('/admin/users')]);
-    allOrders = arr(od.value);
-    allProducts = arr(pd.value);
-    allUsers = arr(ud.value);
-    renderDash();
-  } catch(e){ renderDash(); }
+    var results=await Promise.allSettled([apiFetch('/admin/orders'),apiFetch('/products'),apiFetch('/admin/users')]);
+    allOrders=Array.isArray(results[0].value)?results[0].value:[];
+    allProducts=Array.isArray(results[1].value)?results[1].value:[];
+    allUsers=Array.isArray(results[2].value)?results[2].value:[];
+    renderDash();loadSellerProducts();
+  }catch(e){renderDash();}
 }
-
-function arr(v){ return Array.isArray(v)?v:(v?.orders||v?.products||v?.users||v?.data||[]); }
-
+function sbadge(s){var m={pending:'badge-warning',confirmed:'badge-info',shipped:'badge-purple',delivered:'badge-success',cancelled:'badge-danger'};return '<span class="badge '+(m[s]||'badge-gray')+'">'+(s||'unknown').toUpperCase()+'</span>';}
+function fdate(d){return d?new Date(d).toLocaleDateString('en-IN'):'-';}
 function renderDash(){
-  const rev = allOrders.reduce((s,o)=>s+parseFloat(o.total||o.total_amount||0),0);
-  const pend = allOrders.filter(o=>(o.status||'').toLowerCase()==='pending').length;
-  document.getElementById('s-orders').textContent = allOrders.length;
-  document.getElementById('s-revenue').textContent = 'â‚¹'+rev.toLocaleString('en-IN');
-  document.getElementById('s-users').textContent = allUsers.length;
-  document.getElementById('s-products').textContent = allProducts.length;
-  document.getElementById('pending-badge').textContent = pend;
-
-  document.getElementById('dash-orders').innerHTML = allOrders.slice(0,6).map(o=>`<tr><td><b>#${o.id||'â€”'}</b></td><td><b>â‚¹${parseFloat(o.total||0).toLocaleString('en-IN')}</b></td><td>${sbadge(o.status)}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td></tr>`).join('')||empty('ðŸ“¦','No orders');
-  document.getElementById('dash-products').innerHTML = allProducts.slice(0,5).map(p=>`<tr><td><b>${p.name||'â€”'}</b></td><td style="color:var(--primary);font-weight:700;">â‚¹${parseFloat(p.price||0).toLocaleString('en-IN')}</td><td><span class="badge badge-info">${p.category||'â€”'}</span></td></tr>`).join('')||empty('ðŸ›ï¸','No products');
-  document.getElementById('dash-users').innerHTML = allUsers.slice(0,5).map(u=>`<tr><td><b>${u.name||'â€”'}</b></td><td style="color:var(--text-secondary);">${u.phone||'â€”'}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(u.created_at)}</td></tr>`).join('')||empty('ðŸ‘¥','No users');
-
-  const sc={};
-  allOrders.forEach(o=>{const s=o.status||'unknown';sc[s]=(sc[s]||0)+1;});
-  document.getElementById('dash-breakdown').innerHTML = Object.entries(sc).map(([s,c])=>`
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-      <div style="width:90px;">${sbadge(s)}</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${allOrders.length?Math.round(c/allOrders.length*100):0}%;"></div></div>
-      <span style="font-weight:700;font-size:13px;width:24px;">${c}</span>
-    </div>`).join('')||empty('ðŸ“Š','No data');
+  var rev=allOrders.reduce(function(s,o){return s+parseFloat(o.total||0);},0);
+  var pend=allOrders.filter(function(o){return o.status==='pending';}).length;
+  document.getElementById('s-orders').textContent=allOrders.length;
+  document.getElementById('s-revenue').textContent='Rs.'+rev.toLocaleString('en-IN');
+  document.getElementById('s-users').textContent=allUsers.length;
+  document.getElementById('s-products').textContent=allProducts.length;
+  document.getElementById('pending-badge').textContent=pend;
+  document.getElementById('dash-orders').innerHTML=allOrders.slice(0,6).map(function(o){return '<tr><td><b style="color:var(--primary);">#'+(o.id||'').slice(0,8)+'</b></td><td><b>Rs.'+parseFloat(o.total||0).toLocaleString('en-IN')+'</b></td><td>'+sbadge(o.status)+'</td><td style="color:var(--text-secondary);font-size:12px;">'+fdate(o.created_at)+'</td></tr>';}).join('')||'<tr><td colspan="4"><div class="empty-state"><h3>No orders yet</h3></div></td></tr>';
+  document.getElementById('dash-users').innerHTML=allUsers.slice(0,5).map(function(u){return '<tr><td><b>'+(u.name||'-')+'</b></td><td style="color:var(--text-secondary);">'+(u.phone||'-')+'</td><td style="color:var(--text-secondary);font-size:12px;">'+fdate(u.created_at)+'</td></tr>';}).join('')||'<tr><td colspan="3"><div class="empty-state"><h3>No users yet</h3></div></td></tr>';
 }
-
 async function loadOrders(){
-  try{
-    const d=await apiFetch('/admin/orders');
-    allOrders=arr(d);
-    renderOrders(allOrders);
-    document.getElementById('orders-count').textContent=`${allOrders.length} orders`;
-  } catch(e){ document.getElementById('orders-table').innerHTML=`<tr><td colspan="6">${empty('ðŸ”Œ','Cannot load â€” check API settings')}</td></tr>`; }
+  try{var d=await apiFetch('/admin/orders');allOrders=Array.isArray(d)?d:[];renderOrders(allOrders);document.getElementById('orders-count').textContent=allOrders.length+' orders';}
+  catch(e){document.getElementById('orders-table').innerHTML='<tr><td colspan="6"><div class="empty-state"><h3>Cannot load orders</h3></div></td></tr>';}
 }
-
 function renderOrders(list){
-  document.getElementById('orders-table').innerHTML = list.map(o=>`
-    <tr>
-      <td><b style="color:var(--primary);">#${o.id||'â€”'}</b></td>
-      <td style="font-size:12px;color:var(--text-secondary);">${o.user_id||o.user_name||'â€”'}</td>
-      <td><b>â‚¹${parseFloat(o.total||o.total_amount||0).toLocaleString('en-IN')}</b></td>
-      <td>${sbadge(o.status)}</td>
-      <td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td>
-      <td><button class="action-btn edit" onclick='openOrderModal(${JSON.stringify(o).replace(/'/g,"&#39;")})'>âœï¸ Update</button></td>
-    </tr>`).join('')||`<tr><td colspan="6">${empty('ðŸ“¦','No orders found')}</td></tr>`;
+  document.getElementById('orders-table').innerHTML=list.map(function(o){return '<tr><td><b style="color:var(--primary);">#'+(o.id||'').slice(0,8)+'...</b></td><td style="font-size:12px;">'+(o.user_name||o.user_phone||'-')+'</td><td><b>Rs.'+parseFloat(o.total||0).toLocaleString('en-IN')+'</b></td><td>'+sbadge(o.status)+'</td><td style="color:var(--text-secondary);font-size:12px;">'+fdate(o.created_at)+'</td><td><button class="btn btn-ghost btn-sm" onclick=\'openOrderModal('+JSON.stringify(o).replace(/\'/g,"&#39;")+')\'>Update</button></td></tr>';}).join('')||'<tr><td colspan="6"><div class="empty-state"><h3>No orders</h3></div></td></tr>';
 }
-
-function filterOrders(){
-  const st=document.getElementById('order-status-filter').value;
-  const s=document.getElementById('order-search').value.toLowerCase();
-  renderOrders(allOrders.filter(o=>(!st||(o.status||'').toLowerCase()===st)&&(!s||String(o.id).includes(s))));
-}
-
-function openOrderModal(o){
-  document.getElementById('m-order-id').value=o.id||o.order_id;
-  document.getElementById('m-order-cur').value=o.status||'pending';
-  document.getElementById('m-order-status').value=o.status||'pending';
-  openModal('order-modal');
-}
-
+function filterOrders(){var st=document.getElementById('order-status-filter').value;var s=document.getElementById('order-search').value.toLowerCase();renderOrders(allOrders.filter(function(o){return(!st||o.status===st)&&(!s||String(o.id).includes(s));}));}
+function openOrderModal(o){document.getElementById('m-order-id').value=o.id;document.getElementById('m-order-status').value=o.status||'pending';document.getElementById('order-modal').classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 async function updateOrder(){
-  const id=document.getElementById('m-order-id').value;
-  const status=document.getElementById('m-order-status').value;
-  try{ await apiFetch(`/admin/orders/${id}/status`,{method:'PUT',body:JSON.stringify({status})}); toast(`Order #${id} â†’ ${status}`,'success'); closeModal('order-modal'); loadOrders(); }
-  catch(e){ toast('Update failed','error'); }
+  var id=document.getElementById('m-order-id').value;
+  var status=document.getElementById('m-order-status').value;
+  try{await apiFetch('/admin/orders/'+id+'/status',{method:'PUT',body:JSON.stringify({status:status})});toast('Order updated to '+status,'success');closeModal('order-modal');loadOrders();}
+  catch(e){toast('Update failed','error');}
 }
-
 async function loadProducts(){
+  try{var d=await apiFetch('/products');allProducts=Array.isArray(d)?d:[];document.getElementById('products-table').innerHTML=allProducts.map(function(p){return '<tr><td><b>'+(p.name||'-')+'</b></td><td><b style="color:var(--primary);">Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class="badge badge-info">'+(p.category||'-')+'</span></td></tr>';}).join('')||'<tr><td colspan="3"><div class="empty-state"><h3>No products</h3></div></td></tr>';document.getElementById('products-count').textContent=allProducts.length+' products';}
+  catch(e){}
+}
+async function loadSellers(){
+  var el=document.getElementById('sellers-list');
+  el.innerHTML='<div class="loading"><div class="spinner"></div></div>';
   try{
-    const d=await apiFetch('/products');
-    allProducts=arr(d);
-    const cats=[...new Set(allProducts.map(p=>p.category).filter(Boolean))];
-    document.getElementById('cat-filter').innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option>${c}</option>`).join('');
-    renderProducts(allProducts);
-    document.getElementById('products-count').textContent=`${allProducts.length} products`;
-  } catch(e){ document.getElementById('products-table').innerHTML=`<tr><td colspan="6">${empty('ðŸ”Œ','Cannot load')}</td></tr>`; }
+    var d=await apiFetch('/admin/sellers');
+    var sellers=Array.isArray(d)?d:[];
+    if(sellers.length===0){el.innerHTML='<div class="empty-state"><h3>No sellers yet</h3></div>';return;}
+    el.innerHTML=sellers.map(function(s){
+      var sc=s.approval_status==='approved'?'badge-success':s.approval_status==='rejected'?'badge-danger':'badge-warning';
+      var btns=s.approval_status==='pending'?'<button class="btn btn-success btn-sm" onclick="approveSeller(\''+s.id+'\',\'approved\')">Approve</button> <button class="btn btn-danger btn-sm" onclick="approveSeller(\''+s.id+'\',\'rejected\')">Reject</button>':'';
+      return '<div class="approval-card"><div><div style="font-weight:700;font-size:16px;">'+(s.business_name||'-')+'</div><div style="color:var(--text-secondary);font-size:13px;margin-top:4px;">Owner: '+(s.owner_name||'-')+' | '+(s.owner_email||'-')+'</div><div style="color:var(--text-secondary);font-size:13px;">Phone: '+(s.phone||'-')+'</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge '+sc+'">'+(s.approval_status||'pending').toUpperCase()+'</span>'+btns+'</div></div>';
+    }).join('');
+  }catch(e){el.innerHTML='<div class="empty-state"><h3>Cannot load sellers</h3></div>';}
 }
-
-function renderProducts(list){
-  document.getElementById('products-table').innerHTML=list.map(p=>`
-    <tr>
-      <td><div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:38px;height:38px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
-          ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML='ðŸ›ï¸'"/>`:'ðŸ›ï¸'}
-        </div><b style="font-size:13px;">${p.name||'â€”'}</b></div></td>
-      <td><span class="badge badge-info">${p.category||'â€”'}</span></td>
-      <td><b style="color:var(--primary);">â‚¹${parseFloat(p.price||0).toLocaleString('en-IN')}</b></td>
-      <td><span style="text-decoration:line-through;color:var(--text-secondary);">â‚¹${parseFloat(p.original_price||0).toLocaleString('en-IN')}</span></td>
-      <td><span class="badge badge-success">${Math.round(p.discount||((p.original_price-p.price)/p.original_price*100)||0)}% off</span></td>
-      <td>
-        <button class="action-btn edit" onclick='openProductModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>âœï¸</button>
-        <button class="action-btn delete" onclick="delProduct(${p.id})">ðŸ—‘ï¸</button>
-      </td>
-    </tr>`).join('')||`<tr><td colspan="6">${empty('ðŸ›ï¸','No products')}</td></tr>`;
+async function approveSeller(id,status){
+  try{await apiFetch('/admin/sellers/'+id+'/status',{method:'PUT',body:JSON.stringify({status:status})});toast('Seller '+status,'success');loadSellers();}
+  catch(e){toast('Failed','error');}
 }
-
-function filterProducts(){
-  const s=document.getElementById('product-search').value.toLowerCase();
-  const c=document.getElementById('cat-filter').value;
-  renderProducts(allProducts.filter(p=>(!s||(p.name||'').toLowerCase().includes(s))&&(!c||p.category===c)));
-}
-
-function openProductModal(p=null){
-  editProdId=p?.id||null;
-  document.getElementById('pm-title').textContent=p?'Edit Product':'Add Product';
-  document.getElementById('pm-name').value=p?.name||'';
-  document.getElementById('pm-desc').value=p?.description||'';
-  document.getElementById('pm-price').value=p?.price||'';
-  document.getElementById('pm-original').value=p?.original_price||'';
-  document.getElementById('pm-cat').value=p?.category||'';
-  document.getElementById('pm-img').value=p?.image_url||'';
-  openModal('product-modal');
-}
-
-async function saveProduct(){
-  const body={name:document.getElementById('pm-name').value,description:document.getElementById('pm-desc').value,price:parseFloat(document.getElementById('pm-price').value),original_price:parseFloat(document.getElementById('pm-original').value),category:document.getElementById('pm-cat').value,image_url:document.getElementById('pm-img').value};
+async function loadSellerProducts(){
+  var el=document.getElementById('seller-products-list');
+  el.innerHTML='<div class="loading"><div class="spinner"></div></div>';
   try{
-    if(editProdId) await apiFetch(`/products/${editProdId}`,{method:'PUT',body:JSON.stringify(body)});
-    else await apiFetch('/products',{method:'POST',body:JSON.stringify(body)});
-    toast(editProdId?'Product updated!':'Product added!','success'); closeModal('product-modal'); loadProducts();
-  } catch(e){ toast('Failed to save','error'); }
+    var d=await apiFetch('/admin/seller-products/pending');
+    var products=Array.isArray(d)?d:[];
+    document.getElementById('approval-badge').textContent=products.length;
+    if(products.length===0){el.innerHTML='<div class="empty-state"><h3>No pending approvals</h3><p>All products reviewed!</p></div>';return;}
+    el.innerHTML=products.map(function(p){
+      var img=p.image?'<img src="'+p.image+'" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border);" onerror="this.style.display=\'none\'"/>':'<div style="width:64px;height:64px;background:var(--bg);border-radius:8px;"></div>';
+      return '<div class="approval-card"><div style="display:flex;gap:16px;align-items:center;">'+img+'<div><div style="font-weight:700;font-size:15px;">'+(p.name||'-')+'</div><div style="color:var(--text-secondary);font-size:13px;">Seller: '+(p.business_name||'-')+'</div><div style="color:var(--primary);font-weight:700;">Rs.'+parseFloat(p.selling_price||0).toLocaleString('en-IN')+'</div><div style="color:var(--text-secondary);font-size:12px;">Stock: '+(p.stock||0)+'</div></div></div><div style="display:flex;gap:8px;"><button class="btn btn-success" onclick="approveProduct(\''+p.id+'\',\'approved\')">Approve</button><button class="btn btn-danger" onclick="approveProduct(\''+p.id+'\',\'rejected\')">Reject</button></div></div>';
+    }).join('');
+  }catch(e){el.innerHTML='<div class="empty-state"><h3>Cannot load products</h3></div>';}
 }
-
-async function delProduct(id){
-  if(!confirm('Delete this product?')) return;
-  try{ await apiFetch(`/products/${id}`,{method:'DELETE'}); toast('Deleted!','success'); loadProducts(); }
-  catch(e){ toast('Delete failed','error'); }
+async function approveProduct(id,status){
+  try{await apiFetch('/admin/seller-products/'+id+'/status',{method:'PUT',body:JSON.stringify({status:status})});toast('Product '+status,'success');loadSellerProducts();}
+  catch(e){toast('Failed','error');}
 }
-
 async function loadUsers(){
-  try{
-    const d=await apiFetch('/admin/users');
-    allUsers=arr(d);
-    document.getElementById('users-table').innerHTML=allUsers.map(u=>`<tr><td style="font-size:12px;color:var(--text-secondary);">#${u.id||'â€”'}</td><td><b>${u.name||'â€”'}</b></td><td>${u.phone||'â€”'}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(u.created_at)}</td></tr>`).join('')||`<tr><td colspan="4">${empty('ðŸ‘¥','No users')}</td></tr>`;
-    document.getElementById('users-count').textContent=`${allUsers.length} users`;
-  } catch(e){ document.getElementById('users-table').innerHTML=`<tr><td colspan="4">${empty('ðŸ”Œ','Cannot load')}</td></tr>`; }
+  try{var d=await apiFetch('/admin/users');allUsers=Array.isArray(d)?d:[];document.getElementById('users-table').innerHTML=allUsers.map(function(u){return '<tr><td><b>'+(u.name||'-')+'</b></td><td style="color:var(--text-secondary);">'+(u.phone||'-')+'</td><td style="color:var(--text-secondary);font-size:12px;">'+fdate(u.created_at)+'</td></tr>';}).join('')||'<tr><td colspan="3"><div class="empty-state"><h3>No users</h3></div></td></tr>';document.getElementById('users-count').textContent=allUsers.length+' users';}
+  catch(e){}
 }
-
-async function loadPayments(){
-  try{
-    const d=await apiFetch('/admin/orders');
-    const orders=arr(d);
-    const rev=orders.reduce((s,o)=>s+parseFloat(o.total||0),0);
-    document.getElementById('pay-total').textContent='â‚¹'+rev.toLocaleString('en-IN');
-    document.getElementById('pay-cod').textContent=orders.filter(o=>o.payment_method==='cod'||!o.payment_method).length;
-    document.getElementById('pay-online').textContent=orders.filter(o=>o.payment_method&&o.payment_method!=='cod').length;
-    document.getElementById('payments-table').innerHTML=orders.map(o=>`<tr><td><b style="color:var(--primary);">#${o.id}</b></td><td><b>â‚¹${parseFloat(o.total||0).toLocaleString('en-IN')}</b></td><td><span class="badge badge-gray">${o.payment_method||'COD'}</span></td><td>${sbadge(o.payment_status||o.status)}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td></tr>`).join('')||`<tr><td colspan="5">${empty('ðŸ’³','No transactions')}</td></tr>`;
-  } catch(e){ document.getElementById('payments-table').innerHTML=`<tr><td colspan="5">${empty('ðŸ”Œ','Cannot load')}</td></tr>`; }
-}
-
-async function loadAnalytics(){
-  try{
-    const [od,pd,ud]=await Promise.allSettled([apiFetch('/admin/orders'),apiFetch('/products'),apiFetch('/admin/users')]);
-    const orders=arr(od.value), products=arr(pd.value), users=arr(ud.value);
-    const rev=orders.reduce((s,o)=>s+parseFloat(o.total||0),0);
-    document.getElementById('a-orders').textContent=orders.length;
-    document.getElementById('a-revenue').textContent='â‚¹'+rev.toLocaleString('en-IN');
-    document.getElementById('a-users').textContent=users.length;
-    document.getElementById('a-avg').textContent='â‚¹'+Math.round(orders.length?rev/orders.length:0).toLocaleString('en-IN');
-    document.getElementById('a-products').textContent=products.length;
-    const sc={};orders.forEach(o=>{const s=o.status||'unknown';sc[s]=(sc[s]||0)+1;});
-    document.getElementById('a-status').innerHTML=Object.entries(sc).map(([s,c])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:90px;">${sbadge(s)}</div><div class="progress-bar"><div class="progress-fill" style="width:${orders.length?Math.round(c/orders.length*100):0}%;"></div></div><b style="width:24px;">${c}</b></div>`).join('')||empty('ðŸ“Š','No data');
-    const cc={};products.forEach(p=>{const c=p.category||'Other';cc[c]=(cc[c]||0)+1;});
-    const mx=Math.max(...Object.values(cc),1);
-    document.getElementById('a-category').innerHTML=Object.entries(cc).map(([c,n])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:80px;font-size:12px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c}</span><div class="progress-bar"><div class="progress-fill" style="width:${Math.round(n/mx*100)}%;background:var(--info);"></div></div><b style="width:24px;">${n}</b></div>`).join('')||empty('ðŸ“¦','No products');
-  } catch(e){ toast('Cannot load analytics','error'); }
-}
-
-function switchTab(tab,el){
-  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  ['stab-general','stab-api','stab-notif'].forEach(id=>document.getElementById(id).style.display='none');
-  document.getElementById(`stab-${tab}`).style.display='block';
-}
-
-function saveApiUrl(){
-  API_URL=document.getElementById('api-url-input').value.trim().replace(/\/$/,'');
-  localStorage.setItem('se_api',API_URL);
-  document.getElementById('cur-api').textContent=API_URL;
-  toast('API URL saved!','success'); checkStatus();
-}
-
-async function testConn(){
-  try{ const r=await fetch(document.getElementById('api-url-input').value.trim()+'/products'); r.ok?toast('âœ… Connected!','success'):toast(`âš ï¸ Status ${r.status}`,'info'); }
-  catch(e){ toast('âŒ Cannot connect','error'); }
-}
-
-function refreshData(){
-  const page=document.querySelector('.page.active')?.id?.replace('page-','');
-  if(page==='dashboard') loadAll(); else if(page) navigate(page,null);
-  toast('Refreshing...','info');
-}
-
-function sbadge(s){
-  const m={pending:'badge-warning',confirmed:'badge-info',processing:'badge-purple',shipped:'badge-info',delivered:'badge-success',cancelled:'badge-danger',paid:'badge-success',failed:'badge-danger'};
-  return `<span class="badge ${m[(s||'').toLowerCase()]||'badge-gray'}">${s||'â€”'}</span>`;
-}
-function fdate(d){ if(!d) return 'â€”'; try{ return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); } catch{ return 'â€”'; } }
-function empty(icon,msg,sub=''){ return `<div class="empty-state"><div class="empty-icon">${icon}</div><h3>${msg}</h3>${sub?`<p>${sub}</p>`:''}</div>`; }
-function openModal(id){ document.getElementById(id).classList.add('open'); }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function toast(msg,type='info'){
-  const t=document.createElement('div');
-  t.className=`toast-item ${type}`;
-  t.innerHTML=`<span>${type==='success'?'âœ…':type==='error'?'âŒ':'â„¹ï¸'}</span>${msg}`;
-  document.getElementById('toast').appendChild(t);
-  setTimeout(()=>t.remove(),3500);
-}
+function toast(msg,type){var t=document.createElement('div');t.className='toast-item '+(type||'info');t.textContent=msg;document.getElementById('toast').appendChild(t);setTimeout(function(){t.remove();},3500);}
 </script>
 </body>
 </html>
