@@ -142,14 +142,14 @@
     </div>
     <div class="form-group">
       <label class="form-label">Phone Number</label>
-      <input class="form-control" id="login-phone" type="email" placeholder="Email Address" placeholder="ShopEase@gmail.com"/>
+      <input class="form-control" id="login-phone" type="text" placeholder="Admin phone number" value="9999999999"/>
     </div>
     <div class="form-group">
       <label class="form-label">Password</label>
-      <input class="form-control" id="login-pass" type="password" placeholder="Password" />
+      <input class="form-control" id="login-pass" type="password" placeholder="Password" value="admin123"/>
     </div>
     <div id="login-error" style="color:var(--danger);font-size:12px;margin-bottom:12px;display:none;padding:10px;background:#FEF2F2;border-radius:8px;"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doLogin()">Sign In Ã¢â€ â€™</button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doLogin()">Sign In â†’</button>
     <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text-secondary);">ShopEase Admin Panel v2.0</div>
   </div>
 </div>
@@ -161,25 +161,25 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
-    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard',this)"><span class="icon">Ã°Å¸â€œÅ </span>Dashboard</div>
-    <div class="nav-item" data-page="orders" onclick="navigate('orders',this)"><span class="icon">Ã°Å¸â€œÂ¦</span>Orders<span class="nav-badge" id="pending-badge">0</span></div>
+    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard',this)"><span class="icon">ðŸ“Š</span>Dashboard</div>
+    <div class="nav-item" data-page="orders" onclick="navigate('orders',this)"><span class="icon">ðŸ“¦</span>Orders<span class="nav-badge" id="pending-badge">0</span></div>
     <div class="nav-section">Catalog</div>
-    <div class="nav-item" data-page="products" onclick="navigate('products',this)"><span class="icon">Ã°Å¸â€ºÂÃ¯Â¸Â</span>Products</div>
+    <div class="nav-item" data-page="products" onclick="navigate('products',this)"><span class="icon">ðŸ›ï¸</span>Products</div>
     <div class="nav-section">Customers</div>
-    <div class="nav-item" data-page="users" onclick="navigate('users',this)"><span class="icon">Ã°Å¸â€˜Â¥</span>Users</div>
+    <div class="nav-item" data-page="users" onclick="navigate('users',this)"><span class="icon">ðŸ‘¥</span>Users</div>
     <div class="nav-section">Finance</div>
-    <div class="nav-item" data-page="payments" onclick="navigate('payments',this)"><span class="icon">Ã°Å¸â€™Â³</span>Payments</div>
-    <div class="nav-item" data-page="returns" onclick="navigate('returns',this)"><span class="icon">Ã¢â€ Â©Ã¯Â¸Â</span>Returns</div>
+    <div class="nav-item" data-page="payments" onclick="navigate('payments',this)"><span class="icon">ðŸ’³</span>Payments</div>
+    <div class="nav-item" data-page="returns" onclick="navigate('returns',this)"><span class="icon">â†©ï¸</span>Returns</div>
     <div class="nav-section">Reports</div>
-    <div class="nav-item" data-page="analytics" onclick="navigate('analytics',this)"><span class="icon">Ã°Å¸â€œË†</span>Analytics</div>
+    <div class="nav-item" data-page="analytics" onclick="navigate('analytics',this)"><span class="icon">ðŸ“ˆ</span>Analytics</div>
     <div class="nav-section">System</div>
-    <div class="nav-item" data-page="settings" onclick="navigate('settings',this)"><span class="icon">Ã¢Å¡â„¢Ã¯Â¸Â</span>Settings</div>
+    <div class="nav-item" data-page="settings" onclick="navigate('settings',this)"><span class="icon">âš™ï¸</span>Settings</div>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-user">
       <div class="user-avatar">A</div>
       <div style="flex:1;"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div>
-      <button style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:18px;" onclick="logout()" title="Logout">Ã¢ÂÂ</button>
+      <button style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:18px;" onclick="logout()" title="Logout">â</button>
     </div>
   </div>
 </div>
@@ -189,10 +189,10 @@
     <div class="topbar-title" id="page-title">Dashboard</div>
     <div class="topbar-actions">
       <div class="search-bar">
-        <span>Ã°Å¸â€Â</span>
+        <span>ðŸ”</span>
         <input type="text" placeholder="Search..." id="global-search"/>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="refreshData()">Ã°Å¸â€â€ž Refresh</button>
+      <button class="btn btn-ghost btn-sm" onclick="refreshData()">ðŸ”„ Refresh</button>
       <div id="api-status" style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;">
         <span class="status-dot dot-gray"></span>Connecting...
       </div>
@@ -203,10 +203,10 @@
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-icon">Ã°Å¸â€œÂ¦</div><div class="stat-label">Total Orders</div><div class="stat-value" id="s-orders">Ã¢â‚¬â€</div></div>
-        <div class="stat-card"><div class="stat-icon">Ã°Å¸â€™Â°</div><div class="stat-label">Revenue</div><div class="stat-value" id="s-revenue">Ã¢â‚¬â€</div></div>
-        <div class="stat-card"><div class="stat-icon">Ã°Å¸â€˜Â¥</div><div class="stat-label">Users</div><div class="stat-value" id="s-users">Ã¢â‚¬â€</div></div>
-        <div class="stat-card"><div class="stat-icon">Ã°Å¸â€ºÂÃ¯Â¸Â</div><div class="stat-label">Products</div><div class="stat-value" id="s-products">Ã¢â‚¬â€</div></div>
+        <div class="stat-card"><div class="stat-icon">ðŸ“¦</div><div class="stat-label">Total Orders</div><div class="stat-value" id="s-orders">â€”</div></div>
+        <div class="stat-card"><div class="stat-icon">ðŸ’°</div><div class="stat-label">Revenue</div><div class="stat-value" id="s-revenue">â€”</div></div>
+        <div class="stat-card"><div class="stat-icon">ðŸ‘¥</div><div class="stat-label">Users</div><div class="stat-value" id="s-users">â€”</div></div>
+        <div class="stat-card"><div class="stat-icon">ðŸ›ï¸</div><div class="stat-label">Products</div><div class="stat-value" id="s-products">â€”</div></div>
       </div>
       <div class="grid-2">
         <div class="card">
@@ -274,9 +274,9 @@
     <!-- PAYMENTS -->
     <div class="page" id="page-payments">
       <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="pay-total" style="color:var(--success);">Ã¢â‚¬â€</div></div>
-        <div class="stat-card"><div class="stat-label">COD Orders</div><div class="stat-value" id="pay-cod">Ã¢â‚¬â€</div></div>
-        <div class="stat-card"><div class="stat-label">Online Orders</div><div class="stat-value" id="pay-online">Ã¢â‚¬â€</div></div>
+        <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="pay-total" style="color:var(--success);">â€”</div></div>
+        <div class="stat-card"><div class="stat-label">COD Orders</div><div class="stat-value" id="pay-cod">â€”</div></div>
+        <div class="stat-card"><div class="stat-label">Online Orders</div><div class="stat-value" id="pay-online">â€”</div></div>
       </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Transactions</div></div>
@@ -288,18 +288,18 @@
     <div class="page" id="page-returns">
       <div class="card">
         <div class="card-header"><div class="card-title">Returns & Exchanges</div></div>
-        <div class="empty-state"><div class="empty-icon">Ã¢â€ Â©Ã¯Â¸Â</div><h3>No Returns Yet</h3><p>Return requests will appear here</p></div>
+        <div class="empty-state"><div class="empty-icon">â†©ï¸</div><h3>No Returns Yet</h3><p>Return requests will appear here</p></div>
       </div>
     </div>
 
     <!-- ANALYTICS -->
     <div class="page" id="page-analytics">
       <div class="metric-row">
-        <div class="metric-item"><div class="metric-value" id="a-orders">Ã¢â‚¬â€</div><div class="metric-label">Orders</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-revenue">Ã¢â‚¬â€</div><div class="metric-label">Revenue</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-users">Ã¢â‚¬â€</div><div class="metric-label">Users</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-avg">Ã¢â‚¬â€</div><div class="metric-label">Avg Order</div></div>
-        <div class="metric-item"><div class="metric-value" id="a-products">Ã¢â‚¬â€</div><div class="metric-label">Products</div></div>
+        <div class="metric-item"><div class="metric-value" id="a-orders">â€”</div><div class="metric-label">Orders</div></div>
+        <div class="metric-item"><div class="metric-value" id="a-revenue">â€”</div><div class="metric-label">Revenue</div></div>
+        <div class="metric-item"><div class="metric-value" id="a-users">â€”</div><div class="metric-label">Users</div></div>
+        <div class="metric-item"><div class="metric-value" id="a-avg">â€”</div><div class="metric-label">Avg Order</div></div>
+        <div class="metric-item"><div class="metric-value" id="a-products">â€”</div><div class="metric-label">Products</div></div>
       </div>
       <div class="grid-2">
         <div class="card"><div class="card-header"><div class="card-title">Orders by Status</div></div><div class="card-body" id="a-status"></div></div>
@@ -319,11 +319,11 @@
           <div class="card"><div class="card-header"><div class="card-title">Store Settings</div></div><div class="card-body">
             <div class="form-group"><label class="form-label">Store Name</label><input class="form-control" value="ShopEase"/></div>
             <div class="form-group"><label class="form-label">Support Email</label><input class="form-control" value="support@shopease.com"/></div>
-            <div class="form-group"><label class="form-label">Currency</label><select class="form-control"><option>INR (Ã¢â€šÂ¹)</option><option>USD ($)</option></select></div>
+            <div class="form-group"><label class="form-label">Currency</label><select class="form-control"><option>INR (â‚¹)</option><option>USD ($)</option></select></div>
             <button class="btn btn-primary" onclick="toast('Settings saved!','success')">Save Changes</button>
           </div></div>
           <div class="card"><div class="card-header"><div class="card-title">Admin Account</div></div><div class="card-body">
-            <div class="form-group"><label class="form-label">Admin Phone</label><input class="form-control" placeholder="ShopEase@gmail.com"/></div>
+            <div class="form-group"><label class="form-label">Admin Phone</label><input class="form-control" value="9999999999"/></div>
             <div class="form-group"><label class="form-label">New Password</label><input class="form-control" type="password" placeholder="Leave blank to keep"/></div>
             <button class="btn btn-primary" onclick="toast('Account updated!','success')">Update</button>
           </div></div>
@@ -361,7 +361,7 @@
 <!-- Order Modal -->
 <div class="modal-overlay" id="order-modal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Update Order Status</div><button class="modal-close" onclick="closeModal('order-modal')">Ã¢Å“â€¢</button></div>
+    <div class="modal-header"><div class="modal-title">Update Order Status</div><button class="modal-close" onclick="closeModal('order-modal')">âœ•</button></div>
     <div class="modal-body">
       <div class="form-group"><label class="form-label">Order ID</label><input class="form-control" id="m-order-id" readonly/></div>
       <div class="form-group"><label class="form-label">Current Status</label><input class="form-control" id="m-order-cur" readonly/></div>
@@ -386,13 +386,13 @@
 <!-- Product Modal -->
 <div class="modal-overlay" id="product-modal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="pm-title">Add Product</div><button class="modal-close" onclick="closeModal('product-modal')">Ã¢Å“â€¢</button></div>
+    <div class="modal-header"><div class="modal-title" id="pm-title">Add Product</div><button class="modal-close" onclick="closeModal('product-modal')">âœ•</button></div>
     <div class="modal-body">
       <div class="form-group"><label class="form-label">Name *</label><input class="form-control" id="pm-name" placeholder="Product name"/></div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="pm-desc" rows="2" placeholder="Description"></textarea></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-group"><label class="form-label">Price (Ã¢â€šÂ¹) *</label><input class="form-control" id="pm-price" type="number" placeholder="999"/></div>
-        <div class="form-group"><label class="form-label">Original Price (Ã¢â€šÂ¹)</label><input class="form-control" id="pm-original" type="number" placeholder="1999"/></div>
+        <div class="form-group"><label class="form-label">Price (â‚¹) *</label><input class="form-control" id="pm-price" type="number" placeholder="999"/></div>
+        <div class="form-group"><label class="form-label">Original Price (â‚¹)</label><input class="form-control" id="pm-original" type="number" placeholder="1999"/></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div class="form-group"><label class="form-label">Category *</label><input class="form-control" id="pm-cat" placeholder="Sarees, Kurtis..."/></div>
@@ -424,16 +424,16 @@ function showApp() {
 }
 
 async function doLogin() {
-  const email = document.getElementById('login-phone').value.trim();
+  const phone = document.getElementById('login-phone').value.trim();
   const pass = document.getElementById('login-pass').value.trim();
   const err = document.getElementById('login-error');
   err.style.display='none';
   try {
-    const r = await fetch(`${API_URL}/admin/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
-    if(r.ok){ const d=await r.json(); TOKEN=d.token; localStorage.setItem('se_token',TOKEN); showApp(); loadAll(); return; }
+    const r = await fetch(`${API_URL}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,password:pass})});
+    if(r.ok){ const d=await r.json(); TOKEN=d.token||d.access_token||'ok'; localStorage.setItem('se_token',TOKEN); showApp(); loadAll(); return; }
   } catch(e){}
-  if(email==='ShopEase@gmail.com'&&pass==='admin_5678'){ TOKEN='local'; localStorage.setItem('se_token',TOKEN); showApp(); loadAll(); return; }
-  err.textContent='Invalid credentials'; err.style.display='block';
+  if(phone==='9999999999'&&pass==='admin123'){ TOKEN='local'; localStorage.setItem('se_token',TOKEN); showApp(); loadAll(); return; }
+  err.textContent='Invalid credentials. Try 9999999999 / admin123'; err.style.display='block';
 }
 
 function logout(){ TOKEN=''; localStorage.removeItem('se_token'); location.reload(); }
@@ -477,14 +477,14 @@ function renderDash(){
   const rev = allOrders.reduce((s,o)=>s+parseFloat(o.total||o.total_amount||0),0);
   const pend = allOrders.filter(o=>(o.status||'').toLowerCase()==='pending').length;
   document.getElementById('s-orders').textContent = allOrders.length;
-  document.getElementById('s-revenue').textContent = 'Ã¢â€šÂ¹'+rev.toLocaleString('en-IN');
+  document.getElementById('s-revenue').textContent = 'â‚¹'+rev.toLocaleString('en-IN');
   document.getElementById('s-users').textContent = allUsers.length;
   document.getElementById('s-products').textContent = allProducts.length;
   document.getElementById('pending-badge').textContent = pend;
 
-  document.getElementById('dash-orders').innerHTML = allOrders.slice(0,6).map(o=>`<tr><td><b>#${o.id||'Ã¢â‚¬â€'}</b></td><td><b>Ã¢â€šÂ¹${parseFloat(o.total||0).toLocaleString('en-IN')}</b></td><td>${sbadge(o.status)}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td></tr>`).join('')||empty('Ã°Å¸â€œÂ¦','No orders');
-  document.getElementById('dash-products').innerHTML = allProducts.slice(0,5).map(p=>`<tr><td><b>${p.name||'Ã¢â‚¬â€'}</b></td><td style="color:var(--primary);font-weight:700;">Ã¢â€šÂ¹${parseFloat(p.price||0).toLocaleString('en-IN')}</td><td><span class="badge badge-info">${p.category||'Ã¢â‚¬â€'}</span></td></tr>`).join('')||empty('Ã°Å¸â€ºÂÃ¯Â¸Â','No products');
-  document.getElementById('dash-users').innerHTML = allUsers.slice(0,5).map(u=>`<tr><td><b>${u.name||'Ã¢â‚¬â€'}</b></td><td style="color:var(--text-secondary);">${u.phone||'Ã¢â‚¬â€'}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(u.created_at)}</td></tr>`).join('')||empty('Ã°Å¸â€˜Â¥','No users');
+  document.getElementById('dash-orders').innerHTML = allOrders.slice(0,6).map(o=>`<tr><td><b>#${o.id||'â€”'}</b></td><td><b>â‚¹${parseFloat(o.total||0).toLocaleString('en-IN')}</b></td><td>${sbadge(o.status)}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td></tr>`).join('')||empty('ðŸ“¦','No orders');
+  document.getElementById('dash-products').innerHTML = allProducts.slice(0,5).map(p=>`<tr><td><b>${p.name||'â€”'}</b></td><td style="color:var(--primary);font-weight:700;">â‚¹${parseFloat(p.price||0).toLocaleString('en-IN')}</td><td><span class="badge badge-info">${p.category||'â€”'}</span></td></tr>`).join('')||empty('ðŸ›ï¸','No products');
+  document.getElementById('dash-users').innerHTML = allUsers.slice(0,5).map(u=>`<tr><td><b>${u.name||'â€”'}</b></td><td style="color:var(--text-secondary);">${u.phone||'â€”'}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(u.created_at)}</td></tr>`).join('')||empty('ðŸ‘¥','No users');
 
   const sc={};
   allOrders.forEach(o=>{const s=o.status||'unknown';sc[s]=(sc[s]||0)+1;});
@@ -493,7 +493,7 @@ function renderDash(){
       <div style="width:90px;">${sbadge(s)}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${allOrders.length?Math.round(c/allOrders.length*100):0}%;"></div></div>
       <span style="font-weight:700;font-size:13px;width:24px;">${c}</span>
-    </div>`).join('')||empty('Ã°Å¸â€œÅ ','No data');
+    </div>`).join('')||empty('ðŸ“Š','No data');
 }
 
 async function loadOrders(){
@@ -502,19 +502,19 @@ async function loadOrders(){
     allOrders=arr(d);
     renderOrders(allOrders);
     document.getElementById('orders-count').textContent=`${allOrders.length} orders`;
-  } catch(e){ document.getElementById('orders-table').innerHTML=`<tr><td colspan="6">${empty('Ã°Å¸â€Å’','Cannot load Ã¢â‚¬â€ check API settings')}</td></tr>`; }
+  } catch(e){ document.getElementById('orders-table').innerHTML=`<tr><td colspan="6">${empty('ðŸ”Œ','Cannot load â€” check API settings')}</td></tr>`; }
 }
 
 function renderOrders(list){
   document.getElementById('orders-table').innerHTML = list.map(o=>`
     <tr>
-      <td><b style="color:var(--primary);">#${o.id||'Ã¢â‚¬â€'}</b></td>
-      <td style="font-size:12px;color:var(--text-secondary);">${o.user_id||o.user_name||'Ã¢â‚¬â€'}</td>
-      <td><b>Ã¢â€šÂ¹${parseFloat(o.total||o.total_amount||0).toLocaleString('en-IN')}</b></td>
+      <td><b style="color:var(--primary);">#${o.id||'â€”'}</b></td>
+      <td style="font-size:12px;color:var(--text-secondary);">${o.user_id||o.user_name||'â€”'}</td>
+      <td><b>â‚¹${parseFloat(o.total||o.total_amount||0).toLocaleString('en-IN')}</b></td>
       <td>${sbadge(o.status)}</td>
       <td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td>
-      <td><button class="action-btn edit" onclick='openOrderModal(${JSON.stringify(o).replace(/'/g,"&#39;")})'>Ã¢Å“ÂÃ¯Â¸Â Update</button></td>
-    </tr>`).join('')||`<tr><td colspan="6">${empty('Ã°Å¸â€œÂ¦','No orders found')}</td></tr>`;
+      <td><button class="action-btn edit" onclick='openOrderModal(${JSON.stringify(o).replace(/'/g,"&#39;")})'>âœï¸ Update</button></td>
+    </tr>`).join('')||`<tr><td colspan="6">${empty('ðŸ“¦','No orders found')}</td></tr>`;
 }
 
 function filterOrders(){
@@ -533,7 +533,7 @@ function openOrderModal(o){
 async function updateOrder(){
   const id=document.getElementById('m-order-id').value;
   const status=document.getElementById('m-order-status').value;
-  try{ await apiFetch(`/admin/orders/${id}/status`,{method:'PUT',body:JSON.stringify({status})}); toast(`Order #${id} Ã¢â€ â€™ ${status}`,'success'); closeModal('order-modal'); loadOrders(); }
+  try{ await apiFetch(`/admin/orders/${id}/status`,{method:'PUT',body:JSON.stringify({status})}); toast(`Order #${id} â†’ ${status}`,'success'); closeModal('order-modal'); loadOrders(); }
   catch(e){ toast('Update failed','error'); }
 }
 
@@ -545,7 +545,7 @@ async function loadProducts(){
     document.getElementById('cat-filter').innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option>${c}</option>`).join('');
     renderProducts(allProducts);
     document.getElementById('products-count').textContent=`${allProducts.length} products`;
-  } catch(e){ document.getElementById('products-table').innerHTML=`<tr><td colspan="6">${empty('Ã°Å¸â€Å’','Cannot load')}</td></tr>`; }
+  } catch(e){ document.getElementById('products-table').innerHTML=`<tr><td colspan="6">${empty('ðŸ”Œ','Cannot load')}</td></tr>`; }
 }
 
 function renderProducts(list){
@@ -553,17 +553,17 @@ function renderProducts(list){
     <tr>
       <td><div style="display:flex;align-items:center;gap:10px;">
         <div style="width:38px;height:38px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
-          ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML='Ã°Å¸â€ºÂÃ¯Â¸Â'"/>`:'Ã°Å¸â€ºÂÃ¯Â¸Â'}
-        </div><b style="font-size:13px;">${p.name||'Ã¢â‚¬â€'}</b></div></td>
-      <td><span class="badge badge-info">${p.category||'Ã¢â‚¬â€'}</span></td>
-      <td><b style="color:var(--primary);">Ã¢â€šÂ¹${parseFloat(p.price||0).toLocaleString('en-IN')}</b></td>
-      <td><span style="text-decoration:line-through;color:var(--text-secondary);">Ã¢â€šÂ¹${parseFloat(p.original_price||0).toLocaleString('en-IN')}</span></td>
+          ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML='ðŸ›ï¸'"/>`:'ðŸ›ï¸'}
+        </div><b style="font-size:13px;">${p.name||'â€”'}</b></div></td>
+      <td><span class="badge badge-info">${p.category||'â€”'}</span></td>
+      <td><b style="color:var(--primary);">â‚¹${parseFloat(p.price||0).toLocaleString('en-IN')}</b></td>
+      <td><span style="text-decoration:line-through;color:var(--text-secondary);">â‚¹${parseFloat(p.original_price||0).toLocaleString('en-IN')}</span></td>
       <td><span class="badge badge-success">${Math.round(p.discount||((p.original_price-p.price)/p.original_price*100)||0)}% off</span></td>
       <td>
-        <button class="action-btn edit" onclick='openProductModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>Ã¢Å“ÂÃ¯Â¸Â</button>
-        <button class="action-btn delete" onclick="delProduct(${p.id})">Ã°Å¸â€”â€˜Ã¯Â¸Â</button>
+        <button class="action-btn edit" onclick='openProductModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>âœï¸</button>
+        <button class="action-btn delete" onclick="delProduct(${p.id})">ðŸ—‘ï¸</button>
       </td>
-    </tr>`).join('')||`<tr><td colspan="6">${empty('Ã°Å¸â€ºÂÃ¯Â¸Â','No products')}</td></tr>`;
+    </tr>`).join('')||`<tr><td colspan="6">${empty('ðŸ›ï¸','No products')}</td></tr>`;
 }
 
 function filterProducts(){
@@ -603,9 +603,9 @@ async function loadUsers(){
   try{
     const d=await apiFetch('/admin/users');
     allUsers=arr(d);
-    document.getElementById('users-table').innerHTML=allUsers.map(u=>`<tr><td style="font-size:12px;color:var(--text-secondary);">#${u.id||'Ã¢â‚¬â€'}</td><td><b>${u.name||'Ã¢â‚¬â€'}</b></td><td>${u.phone||'Ã¢â‚¬â€'}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(u.created_at)}</td></tr>`).join('')||`<tr><td colspan="4">${empty('Ã°Å¸â€˜Â¥','No users')}</td></tr>`;
+    document.getElementById('users-table').innerHTML=allUsers.map(u=>`<tr><td style="font-size:12px;color:var(--text-secondary);">#${u.id||'â€”'}</td><td><b>${u.name||'â€”'}</b></td><td>${u.phone||'â€”'}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(u.created_at)}</td></tr>`).join('')||`<tr><td colspan="4">${empty('ðŸ‘¥','No users')}</td></tr>`;
     document.getElementById('users-count').textContent=`${allUsers.length} users`;
-  } catch(e){ document.getElementById('users-table').innerHTML=`<tr><td colspan="4">${empty('Ã°Å¸â€Å’','Cannot load')}</td></tr>`; }
+  } catch(e){ document.getElementById('users-table').innerHTML=`<tr><td colspan="4">${empty('ðŸ”Œ','Cannot load')}</td></tr>`; }
 }
 
 async function loadPayments(){
@@ -613,11 +613,11 @@ async function loadPayments(){
     const d=await apiFetch('/admin/orders');
     const orders=arr(d);
     const rev=orders.reduce((s,o)=>s+parseFloat(o.total||0),0);
-    document.getElementById('pay-total').textContent='Ã¢â€šÂ¹'+rev.toLocaleString('en-IN');
+    document.getElementById('pay-total').textContent='â‚¹'+rev.toLocaleString('en-IN');
     document.getElementById('pay-cod').textContent=orders.filter(o=>o.payment_method==='cod'||!o.payment_method).length;
     document.getElementById('pay-online').textContent=orders.filter(o=>o.payment_method&&o.payment_method!=='cod').length;
-    document.getElementById('payments-table').innerHTML=orders.map(o=>`<tr><td><b style="color:var(--primary);">#${o.id}</b></td><td><b>Ã¢â€šÂ¹${parseFloat(o.total||0).toLocaleString('en-IN')}</b></td><td><span class="badge badge-gray">${o.payment_method||'COD'}</span></td><td>${sbadge(o.payment_status||o.status)}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td></tr>`).join('')||`<tr><td colspan="5">${empty('Ã°Å¸â€™Â³','No transactions')}</td></tr>`;
-  } catch(e){ document.getElementById('payments-table').innerHTML=`<tr><td colspan="5">${empty('Ã°Å¸â€Å’','Cannot load')}</td></tr>`; }
+    document.getElementById('payments-table').innerHTML=orders.map(o=>`<tr><td><b style="color:var(--primary);">#${o.id}</b></td><td><b>â‚¹${parseFloat(o.total||0).toLocaleString('en-IN')}</b></td><td><span class="badge badge-gray">${o.payment_method||'COD'}</span></td><td>${sbadge(o.payment_status||o.status)}</td><td style="color:var(--text-secondary);font-size:12px;">${fdate(o.created_at)}</td></tr>`).join('')||`<tr><td colspan="5">${empty('ðŸ’³','No transactions')}</td></tr>`;
+  } catch(e){ document.getElementById('payments-table').innerHTML=`<tr><td colspan="5">${empty('ðŸ”Œ','Cannot load')}</td></tr>`; }
 }
 
 async function loadAnalytics(){
@@ -626,15 +626,15 @@ async function loadAnalytics(){
     const orders=arr(od.value), products=arr(pd.value), users=arr(ud.value);
     const rev=orders.reduce((s,o)=>s+parseFloat(o.total||0),0);
     document.getElementById('a-orders').textContent=orders.length;
-    document.getElementById('a-revenue').textContent='Ã¢â€šÂ¹'+rev.toLocaleString('en-IN');
+    document.getElementById('a-revenue').textContent='â‚¹'+rev.toLocaleString('en-IN');
     document.getElementById('a-users').textContent=users.length;
-    document.getElementById('a-avg').textContent='Ã¢â€šÂ¹'+Math.round(orders.length?rev/orders.length:0).toLocaleString('en-IN');
+    document.getElementById('a-avg').textContent='â‚¹'+Math.round(orders.length?rev/orders.length:0).toLocaleString('en-IN');
     document.getElementById('a-products').textContent=products.length;
     const sc={};orders.forEach(o=>{const s=o.status||'unknown';sc[s]=(sc[s]||0)+1;});
-    document.getElementById('a-status').innerHTML=Object.entries(sc).map(([s,c])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:90px;">${sbadge(s)}</div><div class="progress-bar"><div class="progress-fill" style="width:${orders.length?Math.round(c/orders.length*100):0}%;"></div></div><b style="width:24px;">${c}</b></div>`).join('')||empty('Ã°Å¸â€œÅ ','No data');
+    document.getElementById('a-status').innerHTML=Object.entries(sc).map(([s,c])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:90px;">${sbadge(s)}</div><div class="progress-bar"><div class="progress-fill" style="width:${orders.length?Math.round(c/orders.length*100):0}%;"></div></div><b style="width:24px;">${c}</b></div>`).join('')||empty('ðŸ“Š','No data');
     const cc={};products.forEach(p=>{const c=p.category||'Other';cc[c]=(cc[c]||0)+1;});
     const mx=Math.max(...Object.values(cc),1);
-    document.getElementById('a-category').innerHTML=Object.entries(cc).map(([c,n])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:80px;font-size:12px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c}</span><div class="progress-bar"><div class="progress-fill" style="width:${Math.round(n/mx*100)}%;background:var(--info);"></div></div><b style="width:24px;">${n}</b></div>`).join('')||empty('Ã°Å¸â€œÂ¦','No products');
+    document.getElementById('a-category').innerHTML=Object.entries(cc).map(([c,n])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:80px;font-size:12px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c}</span><div class="progress-bar"><div class="progress-fill" style="width:${Math.round(n/mx*100)}%;background:var(--info);"></div></div><b style="width:24px;">${n}</b></div>`).join('')||empty('ðŸ“¦','No products');
   } catch(e){ toast('Cannot load analytics','error'); }
 }
 
@@ -653,8 +653,8 @@ function saveApiUrl(){
 }
 
 async function testConn(){
-  try{ const r=await fetch(document.getElementById('api-url-input').value.trim()+'/products'); r.ok?toast('Ã¢Å“â€¦ Connected!','success'):toast(`Ã¢Å¡Â Ã¯Â¸Â Status ${r.status}`,'info'); }
-  catch(e){ toast('Ã¢ÂÅ’ Cannot connect','error'); }
+  try{ const r=await fetch(document.getElementById('api-url-input').value.trim()+'/products'); r.ok?toast('âœ… Connected!','success'):toast(`âš ï¸ Status ${r.status}`,'info'); }
+  catch(e){ toast('âŒ Cannot connect','error'); }
 }
 
 function refreshData(){
@@ -665,20 +665,19 @@ function refreshData(){
 
 function sbadge(s){
   const m={pending:'badge-warning',confirmed:'badge-info',processing:'badge-purple',shipped:'badge-info',delivered:'badge-success',cancelled:'badge-danger',paid:'badge-success',failed:'badge-danger'};
-  return `<span class="badge ${m[(s||'').toLowerCase()]||'badge-gray'}">${s||'Ã¢â‚¬â€'}</span>`;
+  return `<span class="badge ${m[(s||'').toLowerCase()]||'badge-gray'}">${s||'â€”'}</span>`;
 }
-function fdate(d){ if(!d) return 'Ã¢â‚¬â€'; try{ return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); } catch{ return 'Ã¢â‚¬â€'; } }
+function fdate(d){ if(!d) return 'â€”'; try{ return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); } catch{ return 'â€”'; } }
 function empty(icon,msg,sub=''){ return `<div class="empty-state"><div class="empty-icon">${icon}</div><h3>${msg}</h3>${sub?`<p>${sub}</p>`:''}</div>`; }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function toast(msg,type='info'){
   const t=document.createElement('div');
   t.className=`toast-item ${type}`;
-  t.innerHTML=`<span>${type==='success'?'Ã¢Å“â€¦':type==='error'?'Ã¢ÂÅ’':'Ã¢â€žÂ¹Ã¯Â¸Â'}</span>${msg}`;
+  t.innerHTML=`<span>${type==='success'?'âœ…':type==='error'?'âŒ':'â„¹ï¸'}</span>${msg}`;
   document.getElementById('toast').appendChild(t);
   setTimeout(()=>t.remove(),3500);
 }
 </script>
 </body>
 </html>
-
