@@ -283,9 +283,18 @@ async function updateOrder(){
   catch(e){toast('Update failed','error');}
 }
 async function loadProducts(){
-  try{var d=await apiFetch('/products');allProducts=Array.isArray(d)?d:[];document.getElementById('products-table').innerHTML=allProducts.map(function(p){return '<tr><td><img src="'+(p.image_url||'')+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"><br><b>'+(p.name||'-')+'</b></td><td><b style="color:var(--primary);">Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class="badge badge-info">'+(p.category||'-')+'</span></td><td><button onclick="openEditModal(allProducts.find(function(x){return x.id===\''+p.id+'\\'}))" style="padding:4px 10px;background:#C65D07;color:white;border:none;border-radius:6px;cursor:pointer;">Edit</button></td></tr>';}).join('')||'<tr><td colspan="4"><div class="empty-state"><h3>No products</h3></div></td></tr>';document.getElementById('products-count').textContent=allProducts.length+' products';}
-  catch(e){}
+  try{
+    var d=await apiFetch('/products');
+    allProducts=Array.isArray(d)?d:[];
+    var rows=allProducts.map(function(p){
+      var img=p.image_url?'<img src='+JSON.stringify(p.image_url)+' style=width:40px;height:40px;object-fit:cover;border-radius:6px;>':'';
+      return '<tr><td>'+img+'<br><b>'+(p.name||'-')+'</b></td><td><b style=color:var(--primary)>Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class=badge badge-info>'+(p.category||'-')+'</span></td><td><button onclick=openEditModal(allProducts['+allProducts.indexOf(p)+']) style=padding:4px_10px;background:#C65D07;color:white;border:none;border-radius:6px;cursor:pointer>Edit</button></td></tr>';
+    }).join('');
+    document.getElementById('products-table').innerHTML=rows||'<tr><td colspan=4><div class=empty-state><h3>No products</h3></div></td></tr>';
+    document.getElementById('products-count').textContent=allProducts.length+' products';
+  }catch(e){console.error(e);}
 }
+
 async function loadSellers(){
   var el=document.getElementById('sellers-list');
   el.innerHTML='<div class="loading"><div class="spinner"></div></div>';
