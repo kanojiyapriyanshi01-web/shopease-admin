@@ -118,6 +118,20 @@ tbody tr:hover{background:#FAFBFC;}
     <div class="nav-item" data-page="users" onclick="navigate('users',this)">Users</div>
     <div class="nav-section">System</div>
     <div class="nav-item" data-page="delivery-partners" onclick="navigate('delivery-partners',this)">Delivery Partners <span class="nav-badge" id="delivery-badge">0</span></div>
+    <div class="nav-section-title" style="padding:12px 20px 4px;font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;">WAREHOUSE</div>
+    <div class="nav-item" data-page="wh-dashboard" onclick="navigate('wh-dashboard',this)">WH Dashboard</div>
+    <div class="nav-item" data-page="wh-inventory" onclick="navigate('wh-inventory',this)">Inventory</div>
+    <div class="nav-item" data-page="wh-orders" onclick="navigate('wh-orders',this)">WH Orders</div>
+    <div class="nav-item" data-page="wh-dispatch" onclick="navigate('wh-dispatch',this)">Dispatch</div>
+    <div class="nav-item" data-page="wh-returns" onclick="navigate('wh-returns',this)">Returns</div>
+    <div class="nav-item" data-page="wh-employees" onclick="navigate('wh-employees',this)">WH Staff</div>
+    <div class="nav-section-title" style="padding:12px 20px 4px;font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;">WAREHOUSE</div>
+    <div class="nav-item" data-page="wh-dashboard" onclick="navigate('wh-dashboard',this)">WH Dashboard</div>
+    <div class="nav-item" data-page="wh-inventory" onclick="navigate('wh-inventory',this)">Inventory</div>
+    <div class="nav-item" data-page="wh-orders" onclick="navigate('wh-orders',this)">WH Orders</div>
+    <div class="nav-item" data-page="wh-dispatch" onclick="navigate('wh-dispatch',this)">Dispatch</div>
+    <div class="nav-item" data-page="wh-returns" onclick="navigate('wh-returns',this)">Returns</div>
+    <div class="nav-item" data-page="wh-employees" onclick="navigate('wh-employees',this)">WH Staff</div>
     <div class="nav-item" data-page="settings" onclick="navigate('settings',this)">Settings</div>
   </nav>
   <div class="sidebar-footer">
@@ -169,6 +183,120 @@ tbody tr:hover{background:#FAFBFC;}
     </div>
     <div class="page" id="page-users">
       <div class="card"><div class="card-header"><div class="card-title">All Users</div><span id="users-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Joined</th></tr></thead><tbody id="users-table"></tbody></table></div></div>
+    </div>
+    <!-- WH Dashboard -->
+    <div class="page" id="page-wh-dashboard">
+      <h2 style="font-size:18px;font-weight:700;margin-bottom:16px;">Warehouse Dashboard</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-label">Pending Orders</div><div class="stat-value" id="wh-pending">8</div></div>
+        <div class="stat-card"><div class="stat-label">Processing</div><div class="stat-value" style="color:#fd7e14" id="wh-processing">5</div></div>
+        <div class="stat-card"><div class="stat-label">Ready Dispatch</div><div class="stat-value" style="color:#007bff" id="wh-ready">3</div></div>
+        <div class="stat-card"><div class="stat-label">Dispatched</div><div class="stat-value" style="color:#28a745" id="wh-dispatched">24</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-label">Total SKUs</div><div class="stat-value">69</div></div>
+        <div class="stat-card"><div class="stat-label">Low Stock</div><div class="stat-value" style="color:#fd7e14">12</div></div>
+        <div class="stat-card"><div class="stat-label">Out of Stock</div><div class="stat-value" style="color:#dc3545">4</div></div>
+        <div class="stat-card"><div class="stat-label">Damaged</div><div class="stat-value" style="color:#6c757d">2</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Order Flow</div></div>
+          <div style="padding:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;" id="wh-flow-list">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:#fd7e14;"></div><span style="font-size:13px;">Picking In Progress</span></div><span style="font-weight:bold;">3</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:#6f42c1;"></div><span style="font-size:13px;">Quality Check</span></div><span style="font-weight:bold;">2</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:#007bff;"></div><span style="font-size:13px;">Packing</span></div><span style="font-weight:bold;">2</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:#28a745;"></div><span style="font-size:13px;">Ready for Dispatch</span></div><span style="font-weight:bold;">3</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Performance</div></div>
+          <div style="padding:16px;">
+            <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;">Avg Picking Time</span><span style="font-size:12px;font-weight:bold;">8 min</span></div><div style="background:#f0f0f0;border-radius:4px;height:6px;"><div style="background:#28a745;width:80%;height:6px;border-radius:4px;"></div></div></div>
+            <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;">Avg Packing Time</span><span style="font-size:12px;font-weight:bold;">12 min</span></div><div style="background:#f0f0f0;border-radius:4px;height:6px;"><div style="background:#007bff;width:70%;height:6px;border-radius:4px;"></div></div></div>
+            <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;">SLA Compliance</span><span style="font-size:12px;font-weight:bold;">94%</span></div><div style="background:#f0f0f0;border-radius:4px;height:6px;"><div style="background:#fd7e14;width:94%;height:6px;border-radius:4px;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;">Dispatch Success</span><span style="font-size:12px;font-weight:bold;">97%</span></div><div style="background:#f0f0f0;border-radius:4px;height:6px;"><div style="background:#6f42c1;width:97%;height:6px;border-radius:4px;"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WH Inventory -->
+    <div class="page" id="page-wh-inventory">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:18px;font-weight:700;">Inventory Control</h2>
+        <div style="display:flex;gap:8px;">
+          <select onchange="filterInventory(this.value)" style="padding:8px;border:1px solid #ddd;border-radius:6px;font-size:13px;">
+            <option value="">All Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+            <option value="damaged">Damaged</option>
+          </select>
+          <button onclick="loadInventory()" style="padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;">Refresh</button>
+        </div>
+      </div>
+      <div class="card">
+        <div id="inventory-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- WH Orders -->
+    <div class="page" id="page-wh-orders">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:18px;font-weight:700;">Warehouse Orders</h2>
+        <select onchange="filterWHOrders(this.value)" style="padding:8px;border:1px solid #ddd;border-radius:6px;font-size:13px;">
+          <option value="">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="picking">Picking</option>
+          <option value="packing">Packing</option>
+          <option value="ready">Ready</option>
+          <option value="dispatched">Dispatched</option>
+        </select>
+      </div>
+      <div class="card">
+        <div id="wh-orders-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- WH Dispatch -->
+    <div class="page" id="page-wh-dispatch">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:18px;font-weight:700;">Dispatch Management</h2>
+        <button onclick="loadDispatch()" style="padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;">Refresh</button>
+      </div>
+      <div class="card">
+        <div id="dispatch-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- WH Returns -->
+    <div class="page" id="page-wh-returns">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:18px;font-weight:700;">Returns Management</h2>
+        <button onclick="loadWHReturns()" style="padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;">Refresh</button>
+      </div>
+      <div class="card">
+        <div id="wh-returns-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- WH Employees -->
+    <div class="page" id="page-wh-employees">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:18px;font-weight:700;">Warehouse Staff</h2>
+        <button onclick="addWHEmployee()" style="padding:8px 14px;background:#28a745;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;">+ Add Employee</button>
+      </div>
+      <div class="card">
+        <div id="wh-employees-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
     </div>
     <div class="page" id="page-delivery-partners">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -240,7 +368,7 @@ function navigate(page,el){
   else{var n=document.querySelector('[data-page="'+page+'"]');if(n)n.classList.add('active');}
   var titles={dashboard:'Dashboard',orders:'Orders',products:'Products',sellers:'Sellers','seller-products':'Product Approvals',users:'Users',settings:'Settings'};
   document.getElementById('page-title').textContent=titles[page]||page;
-  var map={orders:loadOrders,products:loadProducts,users:loadUsers,sellers:loadSellers,'seller-products':loadSellerProducts,'delivery-partners':loadDeliveryPartners};
+  var map={orders:loadOrders,products:loadProducts,users:loadUsers,sellers:loadSellers,'seller-products':loadSellerProducts,'delivery-partners':loadDeliveryPartners,'wh-dashboard':loadWHDashboard,'wh-inventory':loadInventory,'wh-orders':loadWHOrders,'wh-dispatch':loadDispatch,'wh-returns':loadWHReturns,'wh-employees':loadWHEmployees};
   if(map[page])map[page]();
 }
 function refreshData(){var active=document.querySelector('.page.active');if(active)navigate(active.id.replace('page-',''),null);}
@@ -518,6 +646,270 @@ async function uploadToCloudinary(input) {
     alert('Upload error: ' + e.message);
   }
 }
+// ─── Warehouse Management ─────────────────────────────────────────────────────
+var whInventory = [];
+var whOrders = [];
+
+var mockInventory = [
+  {id:"inv001", name:"Chiffon Floral Saree", sku:"SKU-001", barcode:"8901234567890", available:45, reserved:12, damaged:2, location:"F1-Z1-A01-R01", status:"ok"},
+  {id:"inv002", name:"Cotton Kurta Pajama", sku:"SKU-002", barcode:"8901234567891", available:8, reserved:5, damaged:0, location:"F1-Z1-A02-R03", status:"low"},
+  {id:"inv003", name:"Men Polo T-Shirt", sku:"SKU-003", barcode:"8901234567892", available:0, reserved:0, damaged:1, location:"F1-Z2-A01-R02", status:"out"},
+  {id:"inv004", name:"Kids Winter Jacket", sku:"SKU-004", barcode:"8901234567893", available:23, reserved:8, damaged:0, location:"F1-Z3-A03-R01", status:"ok"},
+  {id:"inv005", name:"Silk Embroidery Saree", sku:"SKU-005", barcode:"8901234567894", available:3, reserved:2, damaged:1, location:"F1-Z1-A01-R04", status:"low"},
+];
+
+var mockWHOrders = [
+  {id:"WHO001", customer:"Rahul Sharma", products:"Chiffon Saree x1", status:"picking", picker:"Suresh P", created:"10:30 AM"},
+  {id:"WHO002", customer:"Priya Singh", products:"Cotton Kurta x2", status:"packing", packer:"Amit K", created:"10:15 AM"},
+  {id:"WHO003", customer:"Amit Kumar", products:"Men T-Shirt x3", status:"ready", shipment:"SHP-2026-003", created:"09:45 AM"},
+  {id:"WHO004", customer:"Neha Gupta", products:"Winter Jacket x1", status:"pending", picker:"-", created:"11:00 AM"},
+  {id:"WHO005", customer:"Raj Patel", products:"Silk Saree x1", status:"dispatched", partner:"Vikram Y", created:"09:00 AM"},
+];
+
+var mockDispatch = [
+  {shipment:"SHP-2026-001", order:"ORD-001", partner:"Vikram Yadav", pickup:"11:30 AM", status:"picked"},
+  {shipment:"SHP-2026-002", order:"ORD-002", partner:"Suresh Patel", pickup:"12:00 PM", status:"pending"},
+  {shipment:"SHP-2026-003", order:"ORD-003", partner:"Unassigned", pickup:"-", status:"ready"},
+  {shipment:"SHP-2026-004", order:"ORD-004", partner:"Vikram Yadav", pickup:"02:00 PM", status:"scheduled"},
+];
+
+var mockWHReturns = [
+  {id:"RET001", customer:"Rahul Sharma", product:"Silk Saree", reason:"Wrong size", received:"10:00 AM", qc:"passed", status:"restocked"},
+  {id:"RET002", customer:"Priya Singh", product:"Cotton Kurta", reason:"Damaged", received:"10:30 AM", qc:"pending", status:"qc_pending"},
+  {id:"RET003", customer:"Amit Kumar", product:"Smart Watch", reason:"Not as described", received:"11:00 AM", qc:"failed", status:"damaged"},
+];
+
+var mockWHStaff = [
+  {id:"EMP001", name:"Suresh Patel", role:"Picker", shift:"Morning", attendance:"Present", tasks:12, completed:10, performance:83},
+  {id:"EMP002", name:"Amit Kumar", role:"Packer", shift:"Morning", attendance:"Present", tasks:8, completed:8, performance:100},
+  {id:"EMP003", name:"Neha Singh", role:"Quality Checker", shift:"Afternoon", attendance:"Absent", tasks:0, completed:0, performance:0},
+  {id:"EMP004", name:"Raj Sharma", role:"Dispatcher", shift:"Morning", attendance:"Present", tasks:15, completed:14, performance:93},
+  {id:"EMP005", name:"Priya Yadav", role:"Inventory Manager", shift:"Morning", attendance:"Present", tasks:6, completed:6, performance:100},
+];
+
+function loadWHDashboard() {
+  // Stats already in HTML as mock data
+}
+
+function loadInventory() {
+  whInventory = mockInventory;
+  renderInventory(whInventory);
+}
+
+function filterInventory(filter) {
+  var filtered = filter ? mockInventory.filter(function(i){ return i.status === filter; }) : mockInventory;
+  renderInventory(filtered);
+}
+
+function renderInventory(items) {
+  var el = document.getElementById("inventory-list");
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><h3>No items</h3></div>'; return; }
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<thead><tr style="background:#f8f9fa;font-size:12px;color:#666;">' +
+    '<th style="padding:10px;text-align:left;">Product</th>' +
+    '<th style="padding:10px;">SKU</th>' +
+    '<th style="padding:10px;">Available</th>' +
+    '<th style="padding:10px;">Reserved</th>' +
+    '<th style="padding:10px;">Damaged</th>' +
+    '<th style="padding:10px;">Location</th>' +
+    '<th style="padding:10px;">Status</th>' +
+    '<th style="padding:10px;">Actions</th>' +
+    '</tr></thead><tbody>' +
+    items.map(function(i) {
+      var statusColor = i.status==="ok"?"#28a745":i.status==="low"?"#fd7e14":"#dc3545";
+      var statusLabel = i.status==="ok"?"In Stock":i.status==="low"?"Low Stock":"Out of Stock";
+      return '<tr style="border-bottom:1px solid #f0f0f0;font-size:13px;">' +
+        '<td style="padding:10px;"><b>'+i.name+'</b><br><span style="color:#999;font-size:11px;">'+i.barcode+'</span></td>' +
+        '<td style="padding:10px;text-align:center;">'+i.sku+'</td>' +
+        '<td style="padding:10px;text-align:center;font-weight:bold;">'+i.available+'</td>' +
+        '<td style="padding:10px;text-align:center;color:#007bff;">'+i.reserved+'</td>' +
+        '<td style="padding:10px;text-align:center;color:#dc3545;">'+i.damaged+'</td>' +
+        '<td style="padding:10px;font-size:11px;color:#666;">'+i.location+'</td>' +
+        '<td style="padding:10px;"><span style="padding:3px 8px;border-radius:12px;font-size:11px;color:white;background:'+statusColor+';">'+statusLabel+'</span></td>' +
+        '<td style="padding:10px;">' +
+          '<button onclick="adjustStock(\''+i.id+'\')" style="padding:3px 8px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;margin-right:4px;">Adjust</button>' +
+          '<button onclick="markDamaged(\''+i.id+'\')" style="padding:3px 8px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Damage</button>' +
+        '</td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+function adjustStock(id) {
+  var qty = prompt("Enter new stock quantity:");
+  if (qty === null) return;
+  var item = whInventory.find(function(i){ return i.id === id; });
+  if (item) {
+    item.available = parseInt(qty);
+    item.status = parseInt(qty) === 0 ? "out" : parseInt(qty) < 10 ? "low" : "ok";
+    renderInventory(whInventory);
+    alert("Stock adjusted!");
+  }
+}
+
+function markDamaged(id) {
+  var item = whInventory.find(function(i){ return i.id === id; });
+  if (item && confirm("Mark 1 unit as damaged?")) {
+    item.damaged++;
+    item.available = Math.max(0, item.available - 1);
+    renderInventory(whInventory);
+    alert("Marked as damaged!");
+  }
+}
+
+function loadWHOrders() {
+  whOrders = mockWHOrders;
+  renderWHOrders(whOrders);
+}
+
+function filterWHOrders(filter) {
+  var filtered = filter ? mockWHOrders.filter(function(o){ return o.status === filter; }) : mockWHOrders;
+  renderWHOrders(filtered);
+}
+
+function renderWHOrders(orders) {
+  var el = document.getElementById("wh-orders-list");
+  if (!orders.length) { el.innerHTML = '<div class="empty-state"><h3>No orders</h3></div>'; return; }
+  var statusColors = {pending:"#6c757d", picking:"#fd7e14", packing:"#6f42c1", ready:"#007bff", dispatched:"#28a745"};
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<thead><tr style="background:#f8f9fa;font-size:12px;color:#666;">' +
+    '<th style="padding:10px;text-align:left;">Order ID</th>' +
+    '<th style="padding:10px;">Customer</th>' +
+    '<th style="padding:10px;">Products</th>' +
+    '<th style="padding:10px;">Status</th>' +
+    '<th style="padding:10px;">Assigned To</th>' +
+    '<th style="padding:10px;">Time</th>' +
+    '<th style="padding:10px;">Actions</th>' +
+    '</tr></thead><tbody>' +
+    orders.map(function(o) {
+      var color = statusColors[o.status] || "#6c757d";
+      var assigned = o.picker !== "-" ? o.picker : (o.packer || o.partner || "-");
+      return '<tr style="border-bottom:1px solid #f0f0f0;font-size:13px;">' +
+        '<td style="padding:10px;"><b>'+o.id+'</b></td>' +
+        '<td style="padding:10px;">'+o.customer+'</td>' +
+        '<td style="padding:10px;">'+o.products+'</td>' +
+        '<td style="padding:10px;"><span style="padding:3px 10px;border-radius:12px;font-size:11px;color:white;background:'+color+';">'+o.status+'</span></td>' +
+        '<td style="padding:10px;">'+assigned+'</td>' +
+        '<td style="padding:10px;color:#999;">'+o.created+'</td>' +
+        '<td style="padding:10px;">' +
+          (o.status==="pending"?'<button onclick="assignPicker(\''+o.id+'\')" style="padding:3px 8px;background:#fd7e14;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Assign Picker</button>':'') +
+          (o.status==="ready"?'<button onclick="assignDelivery(\''+o.id+'\')" style="padding:3px 8px;background:#28a745;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Assign Delivery</button>':'') +
+        '</td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+function assignPicker(id) {
+  var picker = prompt("Enter picker name:");
+  if (!picker) return;
+  var order = whOrders.find(function(o){ return o.id === id; });
+  if (order) { order.status = "picking"; order.picker = picker; renderWHOrders(whOrders); alert("Picker assigned!"); }
+}
+
+function assignDelivery(id) {
+  var partner = prompt("Enter delivery partner name:");
+  if (!partner) return;
+  var order = whOrders.find(function(o){ return o.id === id; });
+  if (order) { order.status = "dispatched"; order.partner = partner; renderWHOrders(whOrders); alert("Delivery assigned!"); }
+}
+
+function loadDispatch() {
+  var el = document.getElementById("dispatch-list");
+  var statusColors = {picked:"#28a745", pending:"#fd7e14", ready:"#007bff", scheduled:"#6f42c1"};
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<thead><tr style="background:#f8f9fa;font-size:12px;color:#666;">' +
+    '<th style="padding:10px;text-align:left;">Shipment ID</th>' +
+    '<th style="padding:10px;">Order</th>' +
+    '<th style="padding:10px;">Delivery Partner</th>' +
+    '<th style="padding:10px;">Pickup Time</th>' +
+    '<th style="padding:10px;">Status</th>' +
+    '<th style="padding:10px;">Actions</th>' +
+    '</tr></thead><tbody>' +
+    mockDispatch.map(function(d) {
+      var color = statusColors[d.status] || "#6c757d";
+      return '<tr style="border-bottom:1px solid #f0f0f0;font-size:13px;">' +
+        '<td style="padding:10px;"><b>'+d.shipment+'</b></td>' +
+        '<td style="padding:10px;">'+d.order+'</td>' +
+        '<td style="padding:10px;">'+d.partner+'</td>' +
+        '<td style="padding:10px;color:#999;">'+d.pickup+'</td>' +
+        '<td style="padding:10px;"><span style="padding:3px 10px;border-radius:12px;font-size:11px;color:white;background:'+color+';">'+d.status+'</span></td>' +
+        '<td style="padding:10px;">' +
+          (d.status==="ready"?'<button onclick="assignDispatch(\''+d.shipment+'\')" style="padding:3px 8px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Assign Partner</button>':'') +
+          (d.status==="pending"?'<span style="color:#999;font-size:11px;">Awaiting pickup</span>':'') +
+        '</td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+function assignDispatch(shipment) {
+  var partner = prompt("Assign delivery partner:");
+  if (!partner) return;
+  var d = mockDispatch.find(function(x){ return x.shipment === shipment; });
+  if (d) { d.partner = partner; d.status = "scheduled"; d.pickup = "ASAP"; loadDispatch(); alert("Partner assigned!"); }
+}
+
+function loadWHReturns() {
+  var el = document.getElementById("wh-returns-list");
+  var statusColors = {restocked:"#28a745", qc_pending:"#fd7e14", damaged:"#dc3545"};
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<thead><tr style="background:#f8f9fa;font-size:12px;color:#666;">' +
+    '<th style="padding:10px;text-align:left;">Return ID</th>' +
+    '<th style="padding:10px;">Customer</th>' +
+    '<th style="padding:10px;">Product</th>' +
+    '<th style="padding:10px;">Reason</th>' +
+    '<th style="padding:10px;">QC</th>' +
+    '<th style="padding:10px;">Status</th>' +
+    '<th style="padding:10px;">Actions</th>' +
+    '</tr></thead><tbody>' +
+    mockWHReturns.map(function(r) {
+      var color = statusColors[r.status] || "#6c757d";
+      return '<tr style="border-bottom:1px solid #f0f0f0;font-size:13px;">' +
+        '<td style="padding:10px;"><b>'+r.id+'</b></td>' +
+        '<td style="padding:10px;">'+r.customer+'</td>' +
+        '<td style="padding:10px;">'+r.product+'</td>' +
+        '<td style="padding:10px;color:#666;">'+r.reason+'</td>' +
+        '<td style="padding:10px;"><span style="padding:2px 8px;border-radius:4px;font-size:11px;background:'+(r.qc==="passed"?"#d4edda":r.qc==="failed"?"#f8d7da":"#fff3cd")+';color:'+(r.qc==="passed"?"#155724":r.qc==="failed"?"#721c24":"#856404")+';">'+r.qc+'</span></td>' +
+        '<td style="padding:10px;"><span style="padding:3px 10px;border-radius:12px;font-size:11px;color:white;background:'+color+';">'+r.status+'</span></td>' +
+        '<td style="padding:10px;">' +
+          (r.status==="qc_pending"?'<button onclick="passQC(\''+r.id+'\')" style="padding:3px 8px;background:#28a745;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;margin-right:4px;">Pass QC</button><button onclick="failQC(\''+r.id+'\')" style="padding:3px 8px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Fail QC</button>':'') +
+        '</td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+function passQC(id) {
+  var r = mockWHReturns.find(function(x){ return x.id === id; });
+  if (r) { r.qc = "passed"; r.status = "restocked"; loadWHReturns(); alert("QC Passed - Item restocked!"); }
+}
+
+function failQC(id) {
+  var r = mockWHReturns.find(function(x){ return x.id === id; });
+  if (r) { r.qc = "failed"; r.status = "damaged"; loadWHReturns(); alert("QC Failed - Item marked damaged!"); }
+}
+
+function loadWHEmployees() {
+  var el = document.getElementById("wh-employees-list");
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<thead><tr style="background:#f8f9fa;font-size:12px;color:#666;">' +
+    '<th style="padding:10px;text-align:left;">Employee</th>' +
+    '<th style="padding:10px;">Role</th>' +
+    '<th style="padding:10px;">Shift</th>' +
+    '<th style="padding:10px;">Attendance</th>' +
+    '<th style="padding:10px;">Tasks</th>' +
+    '<th style="padding:10px;">Performance</th>' +
+    '<th style="padding:10px;">Actions</th>' +
+    '</tr></thead><tbody>' +
+    mockWHStaff.map(function(e) {
+      var perfColor = e.performance >= 90 ? "#28a745" : e.performance >= 70 ? "#fd7e14" : "#dc3545";
+      return '<tr style="border-bottom:1px solid #f0f0f0;font-size:13px;">' +
+        '<td style="padding:10px;"><b>'+e.name+'</b><br><span style="color:#999;font-size:11px;">'+e.id+'</span></td>' +
+        '<td style="padding:10px;">'+e.role+'</td>' +
+        '<td style="padding:10px;">'+e.shift+'</td>' +
+        '<td style="padding:10px;"><span style="padding:2px 8px;border-radius:4px;font-size:11px;background:'+(e.attendance==="Present"?"#d4edda":"#f8d7da")+';color:'+(e.attendance==="Present"?"#155724":"#721c24")+';">'+e.attendance+'</span></td>' +
+        '<td style="padding:10px;">'+e.completed+'/'+e.tasks+'</td>' +
+        '<td style="padding:10px;"><div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;background:#f0f0f0;border-radius:4px;height:6px;"><div style="background:'+perfColor+';width:'+e.performance+'%;height:6px;border-radius:4px;"></div></div><span style="font-size:12px;font-weight:bold;color:'+perfColor+';">'+e.performance+'%</span></div></td>' +
+        '<td style="padding:10px;"><button onclick="editEmployee(\''+e.id+'\')" style="padding:3px 8px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Edit</button></td>' +
+      '</tr>';
+    }).join('') + '</tbody></table>';
+}
+
+function editEmployee(id) { alert("Edit employee: " + id); }
+function addWHEmployee() { alert("Add new warehouse employee form coming soon!"); }
 </script>
 <!-- Edit Product Modal -->
 <div id="edit-product-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;overflow-y:auto;">
