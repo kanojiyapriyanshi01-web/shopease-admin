@@ -497,6 +497,27 @@ function activatePartner(id){
 function closeModal(){
   document.getElementById("dp-modal").style.display="none";
 }
+async function uploadToCloudinary(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  var formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'shopease_products');
+  formData.append('cloud_name', 'dkunif6kd');
+  try {
+    document.getElementById('edit-image-url').value = 'Uploading...';
+    var res = await fetch('https://api.cloudinary.com/v1_1/dkunif6kd/image/upload', {method:'POST', body:formData});
+    var data = await res.json();
+    if (data.secure_url) {
+      document.getElementById('edit-image-url').value = data.secure_url;
+      document.getElementById('edit-img-preview').src = data.secure_url;
+    } else {
+      alert('Upload failed');
+    }
+  } catch(e) {
+    alert('Upload error: ' + e.message);
+  }
+}
 </script>
 <!-- Edit Product Modal -->
 <div id="edit-product-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;overflow-y:auto;">
@@ -507,7 +528,11 @@ function closeModal(){
     </div>
     <div style="margin-bottom:16px;">
       <img id="edit-img-preview" src="" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:12px;background:#f0f0f0;" onerror="this.src='https://via.placeholder.com/400x200'">
-      <label style="font-weight:600;display:block;margin-bottom:6px;">Product Image URL</label>
+      <label style="font-weight:600;display:block;margin-bottom:6px;">Product Image</label>
+      <input type="file" id="edit-image-file" accept="image/*" onchange="uploadToCloudinary(this)" style="display:none">
+      <button onclick="document.getElementById('edit-image-file').click()" style="width:100%;padding:10px;border:2px dashed #C65D07;border-radius:8px;background:#fff8f5;color:#C65D07;cursor:pointer;font-size:13px;margin-bottom:8px;">&#8679; Upload Image (Cloudinary)</button>
+      <div style="text-align:center;color:#999;font-size:12px;margin-bottom:6px;">OR</div>
+      <label style="font-weight:600;display:block;margin-bottom:6px;">Paste Image URL</label>
       <input id="edit-image-url" type="text" placeholder="https://images.unsplash.com/..." style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;" oninput="document.getElementById('edit-img-preview').src=this.value">
     </div>
     <div style="margin-bottom:16px;">
