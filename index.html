@@ -257,7 +257,7 @@ async function updateOrder(){
   catch(e){toast('Update failed','error');}
 }
 async function loadProducts(){
-  try{var d=await apiFetch('/products');allProducts=Array.isArray(d)?d:[];document.getElementById('products-table').innerHTML=allProducts.map(function(p){return '<tr><td><img src="'+(p.image_url||'https://via.placeholder.com/40')+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"><br><b>'+(p.name||'-')+'</b></td><td><b style="color:var(--primary);">Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class="badge badge-info">'+(p.category||'-')+'</span></td><td><button onclick="editProductImage(this,\''+p.id+'\',\'\'+(p.image_url||\'\')+\'\')" style="padding:4px 10px;background:#C65D07;color:white;border:none;border-radius:6px;cursor:pointer;">Edit Image</button></td></tr>';}).join('')||'<tr><td colspan="4"><div class="empty-state"><h3>No products</h3></div></td></tr>';document.getElementById('products-count').textContent=allProducts.length+' products';}
+  try{var d=await apiFetch('/products');allProducts=Array.isArray(d)?d:[];document.getElementById('products-table').innerHTML=allProducts.map(function(p){return '<tr><td><img src="'+(p.image_url||'https://via.placeholder.com/40')+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"><br><b>'+(p.name||'-')+'</b></td><td><b style="color:var(--primary);">Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class="badge badge-info">'+(p.category||'-')+'</span></td><td><button onclick="openEditModal(allProducts.find(function(x){return x.id===\''+p.id+'\\'}))" style="padding:4px 10px;background:#C65D07;color:white;border:none;border-radius:6px;cursor:pointer;">Edit</button></td></tr>';}).join('')||'<tr><td colspan="4"><div class="empty-state"><h3>No products</h3></div></td></tr>';document.getElementById('products-count').textContent=allProducts.length+' products';}
   catch(e){}
 }
 async function loadSellers(){
@@ -317,6 +317,95 @@ async function editProductImage(btn, productId, currentUrl) {
     alert('Update failed');
   }
 }
+function openEditModal(product) {
+  document.getElementById('edit-product-id').value = product.id;
+  document.getElementById('edit-name').value = product.name || '';
+  document.getElementById('edit-price').value = product.price || '';
+  document.getElementById('edit-stock').value = product.stock || '';
+  document.getElementById('edit-category').value = product.category || '';
+  document.getElementById('edit-description').value = product.description || '';
+  document.getElementById('edit-image-url').value = product.image_url || '';
+  document.getElementById('edit-img-preview').src = product.image_url || 'https://via.placeholder.com/400x200';
+  document.getElementById('edit-error').textContent = '';
+  document.getElementById('edit-product-modal').style.display = 'block';
+}
+function closeEditModal() {
+  document.getElementById('edit-product-modal').style.display = 'none';
+}
+async function saveProduct() {
+  var id = document.getElementById('edit-product-id').value;
+  var body = {
+    name: document.getElementById('edit-name').value,
+    price: parseFloat(document.getElementById('edit-price').value),
+    stock: parseInt(document.getElementById('edit-stock').value),
+    category: document.getElementById('edit-category').value,
+    description: document.getElementById('edit-description').value,
+    image_url: document.getElementById('edit-image-url').value,
+  };
+  try {
+    await fetch(BASE+'/admin/products/'+id, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},
+      body: JSON.stringify(body)
+    });
+    closeEditModal();
+    loadProducts();
+    alert('Product updated!');
+  } catch(e) {
+    document.getElementById('edit-error').textContent = 'Update failed: ' + e.message;
+  }
+}
+window.onclick = function(e) {
+  var modal = document.getElementById('edit-product-modal');
+  if (e.target === modal) closeEditModal();
+};
 </script>
+<!-- Edit Product Modal -->
+<div id="edit-product-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;overflow-y:auto;">
+  <div style="background:white;max-width:520px;margin:40px auto;border-radius:12px;padding:24px;position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:20px;font-weight:700;">Edit Product</h2>
+      <button onclick="closeEditModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#666;">&times;</button>
+    </div>
+    <div style="margin-bottom:16px;">
+      <img id="edit-img-preview" src="" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:12px;background:#f0f0f0;" onerror="this.src='https://via.placeholder.com/400x200'">
+      <label style="font-weight:600;display:block;margin-bottom:6px;">Product Image URL</label>
+      <input id="edit-image-url" type="text" placeholder="https://images.unsplash.com/..." style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;" oninput="document.getElementById('edit-img-preview').src=this.value">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-weight:600;display:block;margin-bottom:6px;">Product Name</label>
+      <input id="edit-name" type="text" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div>
+        <label style="font-weight:600;display:block;margin-bottom:6px;">Price (Rs.)</label>
+        <input id="edit-price" type="number" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-weight:600;display:block;margin-bottom:6px;">Stock</label>
+        <input id="edit-stock" type="number" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;">
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-weight:600;display:block;margin-bottom:6px;">Category</label>
+      <select id="edit-category" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;">
+        <option>Sarees</option><option>Kurtis</option><option>Men</option><option>Kids</option>
+        <option>Makeup</option><option>Jewellery</option><option>Electronics</option>
+        <option>Home</option><option>Bags</option><option>Accessories</option>
+        <option>Footwear</option><option>Skincare</option>
+      </select>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="font-weight:600;display:block;margin-bottom:6px;">Description</label>
+      <textarea id="edit-description" rows="3" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical;"></textarea>
+    </div>
+    <input type="hidden" id="edit-product-id">
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeEditModal()" style="flex:1;padding:12px;border:1.5px solid #ddd;border-radius:8px;background:white;cursor:pointer;font-size:14px;">Cancel</button>
+      <button onclick="saveProduct()" style="flex:2;padding:12px;background:#C65D07;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">Save Changes</button>
+    </div>
+    <div id="edit-error" style="color:red;margin-top:10px;font-size:13px;"></div>
+  </div>
+</div>
 </body>
 </html>
