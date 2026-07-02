@@ -283,7 +283,7 @@ async function updateOrder(){
   catch(e){toast('Update failed','error');}
 }
 async function loadProducts(){
-  try{var d=await apiFetch('/products');allProducts=Array.isArray(d)?d:[];document.getElementById('products-table').innerHTML=allProducts.map(function(p){return '<tr><td><img src="'+(p.image_url||'https://via.placeholder.com/40')+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"><br><b>'+(p.name||'-')+'</b></td><td><b style="color:var(--primary);">Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class="badge badge-info">'+(p.category||'-')+'</span></td><td><button onclick="openEditModal(allProducts.find(function(x){return x.id===\''+p.id+'\\'}))" style="padding:4px 10px;background:#C65D07;color:white;border:none;border-radius:6px;cursor:pointer;">Edit</button></td></tr>';}).join('')||'<tr><td colspan="4"><div class="empty-state"><h3>No products</h3></div></td></tr>';document.getElementById('products-count').textContent=allProducts.length+' products';}
+  try{var d=await apiFetch('/products');allProducts=Array.isArray(d)?d:[];document.getElementById('products-table').innerHTML=allProducts.map(function(p){return '<tr><td><img src="'+(p.image_url||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22%23eee%22/%3E%3C/svg%3E')+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"><br><b>'+(p.name||'-')+'</b></td><td><b style="color:var(--primary);">Rs.'+parseFloat(p.price||0).toLocaleString('en-IN')+'</b></td><td><span class="badge badge-info">'+(p.category||'-')+'</span></td><td><button onclick="openEditModal(allProducts.find(function(x){return x.id===\''+p.id+'\\'}))" style="padding:4px 10px;background:#C65D07;color:white;border:none;border-radius:6px;cursor:pointer;">Edit</button></td></tr>';}).join('')||'<tr><td colspan="4"><div class="empty-state"><h3>No products</h3></div></td></tr>';document.getElementById('products-count').textContent=allProducts.length+' products';}
   catch(e){}
 }
 async function loadSellers(){
@@ -351,7 +351,7 @@ function openEditModal(product) {
   document.getElementById('edit-category').value = product.category || '';
   document.getElementById('edit-description').value = product.description || '';
   document.getElementById('edit-image-url').value = product.image_url || '';
-  document.getElementById('edit-img-preview').src = product.image_url || 'https://via.placeholder.com/400x200';
+  document.getElementById('edit-img-preview').src = product.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect width=%22400%22 height=%22200%22 fill=%22%23eee%22/%3E%3C/svg%3E';
   document.getElementById('edit-error').textContent = '';
   document.getElementById('edit-product-modal').style.display = 'block';
 }
@@ -506,7 +506,7 @@ function closeModal(){
       <button onclick="closeEditModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#666;">&times;</button>
     </div>
     <div style="margin-bottom:16px;">
-      <img id="edit-img-preview" src="" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:12px;background:#f0f0f0;" onerror="this.src='https://via.placeholder.com/400x200'">
+      <img id="edit-img-preview" src="" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:12px;background:#f0f0f0;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect width=%22400%22 height=%22200%22 fill=%22%23eee%22/%3E%3C/svg%3E'">
       <label style="font-weight:600;display:block;margin-bottom:6px;">Product Image URL</label>
       <input id="edit-image-url" type="text" placeholder="https://images.unsplash.com/..." style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;box-sizing:border-box;" oninput="document.getElementById('edit-img-preview').src=this.value">
     </div>
