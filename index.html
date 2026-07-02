@@ -117,6 +117,7 @@ tbody tr:hover{background:#FAFBFC;}
     <div class="nav-section">Customers</div>
     <div class="nav-item" data-page="users" onclick="navigate('users',this)">Users</div>
     <div class="nav-section">System</div>
+    <div class="nav-item" data-page="delivery-partners" onclick="navigate('delivery-partners',this)">Delivery Partners <span class="nav-badge" id="delivery-badge">0</span></div>
     <div class="nav-item" data-page="settings" onclick="navigate('settings',this)">Settings</div>
   </nav>
   <div class="sidebar-footer">
@@ -169,6 +170,31 @@ tbody tr:hover{background:#FAFBFC;}
     <div class="page" id="page-users">
       <div class="card"><div class="card-header"><div class="card-title">All Users</div><span id="users-count" style="font-size:12px;color:var(--text-secondary);">Loading...</span></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Joined</th></tr></thead><tbody id="users-table"></tbody></table></div></div>
     </div>
+    <div class="page" id="page-delivery-partners">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:18px;font-weight:700;">Delivery Partner Management</h2>
+        <div style="display:flex;gap:8px;">
+          <select id="dp-status-filter" onchange="filterDeliveryPartners()" style="padding:8px;border:1px solid #ddd;border-radius:6px;font-size:13px;">
+            <option value="">All Status</option>
+            <option value="pending_verification">Pending</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <button onclick="loadDeliveryPartners()" style="padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;">Refresh</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-label">Total Partners</div><div class="stat-value" id="dp-total">-</div></div>
+        <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value" style="color:green" id="dp-active">-</div></div>
+        <div class="stat-card"><div class="stat-label">Pending KYC</div><div class="stat-value" style="color:orange" id="dp-pending">-</div></div>
+        <div class="stat-card"><div class="stat-label">Suspended</div><div class="stat-value" style="color:red" id="dp-suspended">-</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Delivery Partners</div></div>
+        <div id="delivery-partners-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
     <div class="page" id="page-settings">
       <div class="card"><div class="card-header"><div class="card-title">Settings</div></div><div class="card-body"><p style="color:var(--text-secondary);font-size:13px;">Backend: https://shopease-backend-be8v.onrender.com</p></div></div>
     </div>
@@ -214,7 +240,7 @@ function navigate(page,el){
   else{var n=document.querySelector('[data-page="'+page+'"]');if(n)n.classList.add('active');}
   var titles={dashboard:'Dashboard',orders:'Orders',products:'Products',sellers:'Sellers','seller-products':'Product Approvals',users:'Users',settings:'Settings'};
   document.getElementById('page-title').textContent=titles[page]||page;
-  var map={orders:loadOrders,products:loadProducts,users:loadUsers,sellers:loadSellers,'seller-products':loadSellerProducts};
+  var map={orders:loadOrders,products:loadProducts,users:loadUsers,sellers:loadSellers,'seller-products':loadSellerProducts,'delivery-partners':loadDeliveryPartners};
   if(map[page])map[page]();
 }
 function refreshData(){var active=document.querySelector('.page.active');if(active)navigate(active.id.replace('page-',''),null);}
@@ -359,6 +385,118 @@ window.onclick = function(e) {
   var modal = document.getElementById('edit-product-modal');
   if (e.target === modal) closeEditModal();
 };
+// ─── Delivery Partner Management ─────────────────────────────────────────────
+var allDeliveryPartners = [];
+
+var mockPartners = [
+  {id:"dp001", name:"Rajesh Kumar", phone:"9876543210", email:"rajesh@email.com", status:"pending_verification", kyc_status:"submitted", vehicle_type:"Bike", vehicle_number:"MH12AB1234", zone:"South Mumbai", warehouse:"Main Warehouse", joining_date:"2026-07-01", total_deliveries:0, avg_rating:0},
+  {id:"dp002", name:"Suresh Patel", phone:"9123456789", email:"suresh@email.com", status:"active", kyc_status:"approved", vehicle_type:"Scooter", vehicle_number:"MH01CD5678", zone:"North Mumbai", warehouse:"Main Warehouse", joining_date:"2026-06-15", total_deliveries:142, avg_rating:4.7},
+  {id:"dp003", name:"Amit Singh", phone:"9988776655", email:"amit@email.com", status:"pending_verification", kyc_status:"pending", vehicle_type:"Bike", vehicle_number:"MH03EF9012", zone:"West Mumbai", warehouse:"Main Warehouse", joining_date:"2026-07-02", total_deliveries:0, avg_rating:0},
+  {id:"dp004", name:"Priya Sharma", phone:"9876001234", email:"priya@email.com", status:"suspended", kyc_status:"approved", vehicle_type:"Scooter", vehicle_number:"MH04GH3456", zone:"East Mumbai", warehouse:"Main Warehouse", joining_date:"2026-05-10", total_deliveries:89, avg_rating:3.9},
+  {id:"dp005", name:"Vikram Yadav", phone:"9001122334", email:"vikram@email.com", status:"active", kyc_status:"approved", vehicle_type:"Van", vehicle_number:"MH05IJ7890", zone:"Central Mumbai", warehouse:"Main Warehouse", joining_date:"2026-04-20", total_deliveries:312, avg_rating:4.9},
+];
+
+function dpStatusColor(s){
+  if(s==="active") return "#28a745";
+  if(s==="pending_verification") return "#fd7e14";
+  if(s==="suspended") return "#dc3545";
+  if(s==="rejected") return "#6c757d";
+  return "#6c757d";
+}
+
+function dpStatusLabel(s){
+  if(s==="pending_verification") return "Pending";
+  if(s==="active") return "Active";
+  if(s==="suspended") return "Suspended";
+  if(s==="rejected") return "Rejected";
+  return s;
+}
+
+async function loadDeliveryPartners(){
+  allDeliveryPartners = mockPartners;
+  document.getElementById("dp-total").textContent = allDeliveryPartners.length;
+  document.getElementById("dp-active").textContent = allDeliveryPartners.filter(p=>p.status==="active").length;
+  document.getElementById("dp-pending").textContent = allDeliveryPartners.filter(p=>p.status==="pending_verification").length;
+  document.getElementById("dp-suspended").textContent = allDeliveryPartners.filter(p=>p.status==="suspended").length;
+  document.getElementById("delivery-badge").textContent = allDeliveryPartners.filter(p=>p.status==="pending_verification").length;
+  renderDeliveryPartners(allDeliveryPartners);
+}
+
+function filterDeliveryPartners(){
+  var filter = document.getElementById("dp-status-filter").value;
+  var filtered = filter ? allDeliveryPartners.filter(p=>p.status===filter) : allDeliveryPartners;
+  renderDeliveryPartners(filtered);
+}
+
+function renderDeliveryPartners(partners){
+  var el = document.getElementById("delivery-partners-list");
+  if(!partners.length){el.innerHTML='<div class="empty-state"><h3>No partners found</h3></div>';return;}
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<thead><tr style="background:#f8f9fa;font-size:12px;color:#666;">' +
+    '<th style="padding:10px;text-align:left;">Partner</th>' +
+    '<th style="padding:10px;text-align:left;">Contact</th>' +
+    '<th style="padding:10px;text-align:left;">Vehicle</th>' +
+    '<th style="padding:10px;text-align:left;">Zone</th>' +
+    '<th style="padding:10px;text-align:left;">KYC</th>' +
+    '<th style="padding:10px;text-align:left;">Status</th>' +
+    '<th style="padding:10px;text-align:left;">Deliveries</th>' +
+    '<th style="padding:10px;text-align:left;">Actions</th>' +
+    '</tr></thead><tbody>' +
+    partners.map(function(p){return '<tr style="border-bottom:1px solid #f0f0f0;font-size:13px;">' +
+      '<td style="padding:10px;"><b>'+p.name+'</b><br><span style="color:#999;font-size:11px;">'+p.id+'</span></td>' +
+      '<td style="padding:10px;">'+p.phone+'<br><span style="color:#999;font-size:11px;">'+p.email+'</span></td>' +
+      '<td style="padding:10px;">'+p.vehicle_type+'<br><span style="color:#999;font-size:11px;">'+p.vehicle_number+'</span></td>' +
+      '<td style="padding:10px;">'+p.zone+'</td>' +
+      '<td style="padding:10px;"><span style="padding:2px 8px;border-radius:4px;font-size:11px;background:'+(p.kyc_status==="approved"?"#d4edda":"#fff3cd")+';color:'+(p.kyc_status==="approved"?"#155724":"#856404")+';">'+p.kyc_status+'</span></td>' +
+      '<td style="padding:10px;"><span style="padding:3px 10px;border-radius:12px;font-size:11px;color:white;background:'+dpStatusColor(p.status)+';">'+dpStatusLabel(p.status)+'</span></td>' +
+      '<td style="padding:10px;">'+(p.total_deliveries>0?p.total_deliveries+' <span style="color:#999;font-size:11px;">&#9733; '+p.avg_rating+'</span>':"New")+'</td>' +
+      '<td style="padding:10px;">' +
+        '<button onclick="viewPartner(\''+p.id+'\')" style="padding:4px 8px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;margin-right:4px;">View</button>' +
+        (p.status==="pending_verification"?'<button onclick="approvePartner(\''+p.id+'\')" style="padding:4px 8px;background:#28a745;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;margin-right:4px;">Approve</button>':'') +
+        (p.status==="active"?'<button onclick="suspendPartner(\''+p.id+'\')" style="padding:4px 8px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Suspend</button>':'') +
+        (p.status==="suspended"?'<button onclick="activatePartner(\''+p.id+'\')" style="padding:4px 8px;background:#28a745;color:white;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Activate</button>':'') +
+      '</td>' +
+    '</tr>';}).join('') +
+    '</tbody></table>';
+}
+
+function viewPartner(id){
+  var p = allDeliveryPartners.find(function(x){return x.id===id;});
+  if(!p) return;
+  document.getElementById("dp-modal-content").innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+    '<div><b>Name:</b> '+p.name+'</div><div><b>Phone:</b> '+p.phone+'</div>' +
+    '<div><b>Email:</b> '+p.email+'</div><div><b>Status:</b> <span style="color:'+dpStatusColor(p.status)+'">'+dpStatusLabel(p.status)+'</span></div>' +
+    '<div><b>Vehicle:</b> '+p.vehicle_type+' ('+p.vehicle_number+')</div><div><b>Zone:</b> '+p.zone+'</div>' +
+    '<div><b>Warehouse:</b> '+p.warehouse+'</div><div><b>KYC:</b> '+p.kyc_status+'</div>' +
+    '<div><b>Total Deliveries:</b> '+p.total_deliveries+'</div><div><b>Rating:</b> '+p.avg_rating+'</div>' +
+    '<div><b>Joined:</b> '+p.joining_date+'</div>' +
+    '</div>' +
+    '<div style="margin-top:16px;display:flex;gap:8px;">' +
+    (p.status==="pending_verification"?'<button onclick="approvePartner(\''+p.id+'\');closeModal()" style="flex:1;padding:10px;background:#28a745;color:white;border:none;border-radius:6px;cursor:pointer;">Approve</button>':'') +
+    (p.status==="active"?'<button onclick="suspendPartner(\''+p.id+'\');closeModal()" style="flex:1;padding:10px;background:#dc3545;color:white;border:none;border-radius:6px;cursor:pointer;">Suspend</button>':'') +
+    '</div>';
+  document.getElementById("dp-modal").style.display = "block";
+}
+
+function approvePartner(id){
+  var p = allDeliveryPartners.find(function(x){return x.id===id;});
+  if(p){ p.status="active"; p.kyc_status="approved"; renderDeliveryPartners(allDeliveryPartners); alert("Partner approved!"); }
+}
+
+function suspendPartner(id){
+  var p = allDeliveryPartners.find(function(x){return x.id===id;});
+  if(p){ p.status="suspended"; renderDeliveryPartners(allDeliveryPartners); alert("Partner suspended!"); }
+}
+
+function activatePartner(id){
+  var p = allDeliveryPartners.find(function(x){return x.id===id;});
+  if(p){ p.status="active"; renderDeliveryPartners(allDeliveryPartners); alert("Partner activated!"); }
+}
+
+function closeModal(){
+  document.getElementById("dp-modal").style.display="none";
+}
 </script>
 <!-- Edit Product Modal -->
 <div id="edit-product-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;overflow-y:auto;">
@@ -405,6 +543,15 @@ window.onclick = function(e) {
       <button onclick="saveProduct()" style="flex:2;padding:12px;background:#C65D07;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">Save Changes</button>
     </div>
     <div id="edit-error" style="color:red;margin-top:10px;font-size:13px;"></div>
+  </div>
+</div>
+<div id="dp-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;">
+  <div style="background:white;max-width:600px;margin:60px auto;border-radius:12px;padding:24px;position:relative;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+      <h2 style="font-size:18px;font-weight:700;">Partner Details</h2>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:22px;cursor:pointer;">&times;</button>
+    </div>
+    <div id="dp-modal-content"></div>
   </div>
 </div>
 </body>
