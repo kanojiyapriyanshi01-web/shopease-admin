@@ -332,7 +332,7 @@ async function editProductImage(btn, productId, currentUrl) {
   if (newUrl === null) return;
   try {
     btn.textContent = 'Saving...';
-    await fetch(BASE+'/admin/products/'+productId+'/image', {
+    await apiFetch('/admin/products/'+productId+'/image', {
       method: 'PUT',
       headers: {'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},
       body: JSON.stringify({image_url: newUrl})
@@ -369,7 +369,7 @@ async function saveProduct() {
     image_url: document.getElementById('edit-image-url').value,
   };
   try {
-    await fetch(BASE+'/admin/products/'+id, {
+    await apiFetch('/admin/products/'+id, {
       method: 'PUT',
       headers: {'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},
       body: JSON.stringify(body)
